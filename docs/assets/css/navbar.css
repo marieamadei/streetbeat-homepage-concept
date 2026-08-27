@@ -1,0 +1,315 @@
+/* ============================================================================
+   Streetbeat - Navigation bar (shared component)
+   The canonical top nav, extracted from the homepage so every page renders the
+   IDENTICAL bar. Structure + behaviour only; the three dropdown panels live in
+   meganav.css / meganav.js and the pill buttons stay per-page (they're a
+   separate element used by heroes and footers too).
+
+   Markup contract (every page):
+     <nav id="nav">
+       <div class="nav-inner">          <!-- the pill surface (morphs) -->
+         <div class="nav-bar">          <!-- the bar row -->
+           <a class="nav-logo" …><img …></a>
+           <ul class="nav-links"> … <li class="has-mega" …> … </ul>
+           <div class="nav-actions"> … .pill … </div>
+           <button class="nav-burger" id="burger">…</button>
+         </div>
+         <div class="nav-drawer">       <!-- expands downwards on hover / burger -->
+           … .mega panels …           <!-- desktop dropdowns -->
+           <div class="nav-mobile">…</div>  <!-- mobile menu (below the breakpoint) -->
+         </div>
+       </div>
+     </nav>
+
+   Behaviour: assets/js/navbar.js (post-hero logo-FAB collapse, sliding hover
+   pill, and the burger that morphs the drawer open on mobile). Depends on tokens.css +
+   typography.css. The .nav-locked rule is a homepage-only intro affordance
+   (harmless elsewhere: the class is never set).
+   ============================================================================ */
+
+/* The nav is a pill in EVERY state:
+   · at the top of the page it spans the content column (same edges as
+     .wrap's inner content - the --max shell inset by --pad), lining up with
+     heroes, sections and the footer card;
+   · after the page's [data-nav-hero] opener has passed, .nav-inner contracts
+     from right to left around the logo without moving the logo itself. */
+nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: var(--z-nav);
+    /* Fixed → sized to the viewport, so it doesn't inherit body's min-width.
+       Hold the same site floor so the pill layout never crushes below it. */
+    min-width: var(--site-min);
+    padding: var(--space-14) calc(max(0px, (100% - var(--max)) / 2) + var(--pad)) 0;
+    transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+}
+/* Once the page starts moving, lift the pill from the canvas without changing
+   its horizontal anchor. The logo therefore occupies one stable screen point. */
+nav.scrolled .nav-inner {
+    box-shadow: var(--shadow-nav-pill);
+}
+/* Homepage intro: the nav waits offscreen/non-interactive until scroll is handed
+   back (see the boot intro). No other page ever gets .nav-locked. */
+.nav-locked #nav {
+    opacity: 0;
+    transform: translateY(-14px);
+    pointer-events: none;
+}
+/* The pill surface. A column flexbox: the bar row on top, the mega drawer
+   below it. On hover the drawer's height animates open (meganav.js), so the
+   pill itself MORPHS downwards to contain the panel - one surface, one
+   backdrop blur, identical in both nav states. */
+.nav-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: var(--surface-nav-glass); /* translucent so the backdrop blur reads */
+    border: 1px solid var(--border-nav-glass);
+    /* NOT --radius-pill: 9999px would interpolate horribly against the open
+       state's --radius-lg. --radius-nav clamps to the same perfect pill.
+       NO overflow:hidden here - clipping on the same element kills the
+       backdrop-filter in Chromium; .nav-drawer does its own clipping. */
+    border-radius: var(--radius-nav);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    backdrop-filter: blur(18px) saturate(1.4);
+    transition: width var(--nav-morph-duration) var(--ease), box-shadow 0.55s var(--ease), background 0.55s var(--ease),
+                border-radius 0.55s var(--ease), border-color 0.55s var(--ease);
+}
+nav.nav-compact .nav-inner {
+    width: var(--nav-compact-width, 100%);
+}
+/* The bar row - what used to be the whole nav-inner. */
+.nav-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-20);
+    width: 100%;
+    padding: var(--space-8) var(--space-10) var(--space-8) var(--space-24);
+    overflow: hidden;
+}
+/* Expanded: the pill relaxes into a card while the drawer is open - same look
+   whether a desktop mega panel or the mobile menu is what's inside it. */
+nav.mega-open .nav-inner,
+nav.menu-open .nav-inner {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-mega-card);
+}
+/* Footer reached: the whole nav slides up out of the way (navbar.js watches
+   the footer with an IntersectionObserver and toggles this class). */
+nav.nav-away {
+    transform: translateY(-115%);
+    pointer-events: none;
+}
+.nav-logo { position: relative; z-index: var(--z-nav-link); display: flex; flex: none; align-items: center; }
+.nav-logo img { height: 21px; display: block; }
+.nav-links { display: flex; flex: none; align-items: center; gap: var(--space-2); position: relative; list-style: none; margin: 0; padding: 0; }
+.nav-links li { list-style: none; }
+.nav-links .nav-hover-slot { position: absolute; inset: 0; pointer-events: none; }
+/* Text style: Body/Base - keeps the three desktop destinations quieter while
+   preserving a full-size target through their vertical padding. */
+.nav-links a,
+.nav-links button.mega-trigger {
+    background: none; border: none; cursor: pointer;
+    font-family: var(--ts-body-base-family);
+    font-size: var(--ts-body-base-size);
+    font-weight: var(--ts-body-base-weight);
+    line-height: var(--ts-body-base-line);
+    letter-spacing: var(--ts-body-base-spacing);
+    color: var(--text-secondary);
+    padding: var(--space-10) var(--space-16);
+    border-radius: var(--radius-pill);
+    position: relative;
+    z-index: var(--z-nav-link);
+    transition: color 0.2s;
+}
+.nav-links a:hover,
+.nav-links button.mega-trigger:hover { color: var(--text-primary); }
+/* Sliding hover pill (green-200) that glides between links (added by navbar.js). */
+.nav-hover {
+    position: absolute;
+    top: 0; left: 0;
+    width: 0; height: 0;
+    background: var(--surface-nav-hover);
+    border-radius: var(--radius-pill);
+    opacity: 0;
+    z-index: 0;
+    pointer-events: none;
+    transition: opacity 0.2s var(--ease), transform 0.32s var(--ease),
+                width 0.32s var(--ease), height 0.32s var(--ease);
+}
+.nav-actions { display: flex; flex: none; align-items: center; gap: var(--space-8); margin-left: auto; transition: opacity var(--nav-content-fade-duration) var(--ease); }
+/* While a mega panel is open the two CTA pills recede so focus stays on the
+   drawer content. They fade only - their box keeps its space, so the bar row
+   never reflows as the drawer morphs open/shut. */
+nav.mega-open .nav-actions { opacity: 0; pointer-events: none; }
+.nav-burger {
+    display: none;
+    flex-direction: column;
+    gap: var(--space-6);
+    background: none; border: none; cursor: pointer;
+    padding: var(--space-8); margin-left: auto;
+}
+.nav-burger span { width: 22px; height: 2px; background: var(--text-primary); border-radius: var(--radius-2xs); transform-origin: center; transition: transform 0.35s var(--ease), opacity 0.2s var(--ease); }
+
+/* The compact control overlays the wordmark instead of replacing it. That
+   keeps the exact same logo node and geometry visible throughout the morph. */
+.nav-fab {
+    position: absolute;
+    inset: 0;
+    z-index: calc(var(--z-nav-link) + 1);
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-nav);
+    background: transparent;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s var(--ease);
+}
+nav.nav-compact .nav-fab { opacity: 1; pointer-events: auto; }
+
+/* Fade everything except the unchanged logo while the right edge contracts. */
+.nav-links,
+.nav-burger {
+    transition: opacity var(--nav-content-fade-duration) var(--ease);
+}
+nav.nav-revealing .nav-links,
+nav.nav-revealing .nav-actions,
+nav.nav-revealing .nav-burger {
+    transition-delay: var(--nav-content-reveal-delay);
+}
+nav.nav-compact .nav-links,
+nav.nav-compact .nav-actions,
+nav.nav-compact .nav-burger {
+    opacity: 0;
+    pointer-events: none;
+    transition-delay: 0s;
+}
+/* Open: the three bars morph into an X. Bars are 2px tall with a 6px gap, so
+   each outer bar's centre travels 8px to meet the middle before rotating. */
+#burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+#burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; transform: scaleX(0.3); }
+#burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+/* ---- Mobile menu (inside the pill drawer) --------------------------------- */
+/* Not a separate overlay: this panel shares the .nav-drawer with the mega
+   panels, so the burger opens it via the SAME downward morph as the desktop
+   dropdowns (navbar.js sizes the drawer). Hidden above the burger breakpoint;
+   the media query below turns it on. */
+.nav-mobile { display: none; padding: var(--space-8) var(--space-12) var(--space-16); }
+.nm-groups { display: flex; flex-direction: column; gap: var(--space-2); }
+.nm-group { border-bottom: 1px solid var(--border-subtle); }
+.nm-group:last-child { border-bottom: 0; }
+.nm-group-trigger {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-16);
+    width: 100%; min-height: var(--space-48);
+    padding: var(--space-14) var(--space-16);
+    border: 0; border-radius: var(--radius-sm);
+    background: transparent; color: var(--text-secondary); cursor: pointer;
+    text-align: left;
+    transition: color 0.2s var(--ease), background 0.25s var(--ease);
+}
+/* The accordion headings reuse the desktop nav trigger type and caret. */
+.nm-label {
+    font-family: var(--ts-body-base-family); font-size: var(--ts-body-base-size);
+    font-weight: var(--ts-body-base-weight); line-height: var(--ts-body-base-line);
+    letter-spacing: var(--ts-body-base-spacing);
+}
+.nm-group-trigger:hover,
+.nm-group-trigger:focus-visible,
+.nm-group.is-open > .nm-group-trigger {
+    background: var(--surface-subtle); color: var(--text-primary);
+}
+.nm-group.is-open > .nm-group-trigger .nav-caret { transform: rotate(45deg); }
+.nm-group-panel { padding: var(--space-8) var(--space-4) var(--space-20); }
+.nm-group-panel[hidden] { display: none; }
+.nm-group-panel .mega-solutions-title,
+.nm-group-panel .mega-eyebrow { padding-inline: var(--space-12); }
+.nm-group-panel .mega-solutions-title { margin-bottom: var(--space-12); }
+.nm-group-panel .mega-feature { padding: var(--space-20); }
+.nm-group-panel .mega-feature--banks { min-height: 0; }
+.nm-group-panel .mega-feature-cta { min-height: var(--space-48); }
+.nm-group-panel .mega-section-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-2); margin-top: var(--space-12); }
+.nm-group-panel .mega-item { min-height: var(--space-48); }
+.nm-group-panel .mega-arrow { opacity: 1; transform: none; }
+.nm-subgroup + .nm-subgroup { margin-top: var(--space-20); }
+.nm-group-panel [aria-current='page'] .mega-item-title,
+.nm-group-panel [aria-current='page'].mega-feature-cta { color: var(--text-accent-green-primary); }
+
+.nm-actions { display: flex; flex-direction: column; gap: var(--space-12); margin-top: var(--space-16); padding: 0 var(--space-4); }
+.nm-actions .pill { width: 100%; min-height: var(--space-48); justify-content: center; text-align: center; }
+
+/* Staggered reveal: as the pill grows, each row fades + slides down from the
+   top, one after another. No blur - on mobile de-blurring every row per frame
+   dragged the open; the plain slide+fade reads snappier. Rows sit hidden until
+   .menu-open, so the cascade replays on every open. --i (set in Nav.astro)
+   indexes the stagger. */
+.nm-group-trigger, .nm-actions > * { opacity: 0; transform: translateY(-12px); }
+nav.menu-open .nm-group-trigger,
+nav.menu-open .nm-actions > * {
+    animation: nm-reveal 0.42s var(--ease) both;
+    /* +0.16s to clear the blur→white swap the drawer waits on (navbar.css
+       mobile block), so the cascade starts as the pill actually begins to grow. */
+    animation-delay: calc(0.28s + var(--i, 0) * 0.06s);
+}
+@keyframes nm-reveal {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* Below this width the desktop bar collapses to the burger + drawer menu.
+   The longer Financial Institutions CTA needs this extra room; the mega
+   panels hide at the same breakpoint in meganav.css.
+   Keep this value in sync with the matching breakpoint in meganav.css. */
+@media (max-width: 1080px) {
+    .nav-links, .nav-actions { display: none; }
+    .nav-burger {
+        display: flex;
+        min-width: var(--space-48);
+        min-height: var(--space-48);
+        align-items: center;
+        justify-content: center;
+    }
+    .nav-mobile { display: block; max-height: inherit; overflow-y: auto; overscroll-behavior: contain; }
+    /* The menu-open card supplies its own shadow, so only suppress the ordinary
+       scrolled shadow while the hamburger drawer is shut. */
+    nav.scrolled:not(.menu-open) .nav-inner { box-shadow: none; }
+    nav.nav-compact.scrolled .nav-inner { box-shadow: var(--shadow-nav-pill); }
+
+    /* Performance: holding the pill's backdrop blur static is cheap, but
+       recomputing blur(18px) for every frame of the drawer's height morph
+       janks the open on mobile. So the instant the burger is pressed the pill
+       very quickly goes fully opaque white and drops the blur, THEN the drawer
+       expands over it - no live backdrop blur during the morph. Fast background
+       + backdrop-filter transition so the swap is near-instant. */
+    .nav-inner {
+        transition: width var(--nav-morph-duration) var(--ease), box-shadow 0.55s var(--ease), background 0.16s var(--ease),
+                    border-radius 0.55s var(--ease), border-color 0.55s var(--ease),
+                    -webkit-backdrop-filter 0.16s var(--ease),
+                    backdrop-filter 0.16s var(--ease);
+    }
+    nav.menu-open .nav-inner {
+        background: var(--surface-canvas);
+        -webkit-backdrop-filter: blur(0px) saturate(1);
+        backdrop-filter: blur(0px) saturate(1);
+    }
+    /* Hold the height expand for that same short beat so the blur→white swap
+       finishes first and never overlaps the costly morph. (On close the delay
+       drops, so the drawer collapses immediately as the blur returns.) */
+    nav.menu-open .nav-drawer { transition-delay: 0.16s; }
+}
+
+/* Reduced motion: rows appear in place, no cascade (the drawer's own height
+   transition is neutralised in meganav.css). */
+@media (prefers-reduced-motion: reduce) {
+    .nav-inner,
+    .nav-links,
+    .nav-actions,
+    .nav-burger,
+    .nav-fab { transition: none; }
+    .nm-group-trigger, .nm-actions > * { opacity: 1; transform: none; }
+    nav.menu-open .nm-group-trigger, nav.menu-open .nm-actions > * { animation: none; }
+}

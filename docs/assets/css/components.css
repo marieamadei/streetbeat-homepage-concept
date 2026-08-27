@@ -1,0 +1,99 @@
+/* ============================================================================
+   Streetbeat - canonical components
+   Consumes the --btn-* component tokens from tokens.css. Rendered live in the
+   /ds control room (Components → Elements); product pages migrate to these
+   classes in a later pass. States derive from each variant's base colour via
+   color-mix() so there is no 4-variant × 4-state colour explosion - only a base
+   bg/fg per variant plus global mix amounts. Depends on tokens.css + typography.css.
+   ============================================================================ */
+
+.sb-btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:var(--btn-gap);
+  border:1px solid transparent; border-radius:var(--btn-radius);
+  line-height:var(--btn-line); white-space:nowrap; cursor:pointer; text-decoration:none;
+  /* font + padding default to size M; size modifiers override both. Font comes
+     from per-size type-style vars (picked via the /ds type-style selector). */
+  font-family:var(--btn-m-family); font-size:var(--btn-m-size); font-weight:var(--btn-m-weight); letter-spacing:var(--btn-m-spacing);
+  padding:var(--btn-pad-y-m) var(--btn-pad-x-m);
+  transition:transform .2s var(--ease), background .2s, box-shadow .2s, border-color .2s;
+}
+
+/* Sizes - each drives padding + font from its per-size type-style vars */
+.sb-btn--s{ font-family:var(--btn-s-family); font-size:var(--btn-s-size); font-weight:var(--btn-s-weight); letter-spacing:var(--btn-s-spacing); padding:var(--btn-pad-y-s) var(--btn-pad-x-s); }
+.sb-btn--m{ font-family:var(--btn-m-family); font-size:var(--btn-m-size); font-weight:var(--btn-m-weight); letter-spacing:var(--btn-m-spacing); padding:var(--btn-pad-y-m) var(--btn-pad-x-m); }
+.sb-btn--l{ font-family:var(--btn-l-family); font-size:var(--btn-l-size); font-weight:var(--btn-l-weight); letter-spacing:var(--btn-l-spacing); padding:var(--btn-pad-y-l) var(--btn-pad-x-l); }
+
+/* Variants - base */
+.sb-btn--primary{ background:var(--btn-primary-bg); color:var(--btn-primary-fg); }
+.sb-btn--secondary{ background:var(--btn-secondary-bg); color:var(--btn-secondary-fg); }
+.sb-btn--default{ background:var(--btn-default-bg); color:var(--btn-default-fg); }
+.sb-btn--ghost{ background:transparent; color:var(--btn-ghost-fg); border-color:var(--btn-ghost-border); }
+.sb-btn--destructive{ background:var(--btn-destructive-bg); color:var(--btn-destructive-fg); }
+
+/* States - hover (real :hover + forced .is-hover for the static state strip) */
+.sb-btn--primary:hover,.sb-btn--primary.is-hover{ background:color-mix(in srgb, var(--btn-primary-bg), var(--btn-state-darken) var(--btn-hover-darken)); }
+.sb-btn--secondary:hover,.sb-btn--secondary.is-hover{ background:color-mix(in srgb, var(--btn-secondary-bg), var(--btn-state-darken) var(--btn-hover-darken)); }
+.sb-btn--default:hover,.sb-btn--default.is-hover{ background:color-mix(in srgb, var(--btn-default-bg), var(--btn-state-darken) var(--btn-hover-darken)); }
+.sb-btn--destructive:hover,.sb-btn--destructive.is-hover{ background:color-mix(in srgb, var(--btn-destructive-bg), var(--btn-state-darken) var(--btn-hover-darken)); }
+.sb-btn--ghost:hover,.sb-btn--ghost.is-hover{ background:color-mix(in srgb, var(--btn-ghost-fg) var(--btn-ghost-hover-fill), transparent); }
+
+/* States - pressed (real :active + forced .is-active) */
+.sb-btn:active,.sb-btn.is-active{ transform:scale(0.97); }
+.sb-btn--primary:active,.sb-btn--primary.is-active{ background:color-mix(in srgb, var(--btn-primary-bg), var(--btn-state-darken) var(--btn-active-darken)); }
+.sb-btn--secondary:active,.sb-btn--secondary.is-active{ background:color-mix(in srgb, var(--btn-secondary-bg), var(--btn-state-darken) var(--btn-active-darken)); }
+.sb-btn--default:active,.sb-btn--default.is-active{ background:color-mix(in srgb, var(--btn-default-bg), var(--btn-state-darken) var(--btn-active-darken)); }
+.sb-btn--destructive:active,.sb-btn--destructive.is-active{ background:color-mix(in srgb, var(--btn-destructive-bg), var(--btn-state-darken) var(--btn-active-darken)); }
+.sb-btn--ghost:active,.sb-btn--ghost.is-active{ background:color-mix(in srgb, var(--btn-ghost-fg) calc(var(--btn-ghost-hover-fill) * 2), transparent); }
+
+/* Disabled */
+.sb-btn[disabled],.sb-btn.is-disabled{ opacity:.5; pointer-events:none; }
+
+/* ----------------------------------------------------------------------------
+   Special button - the big, full-width variant. Colours mirror the team card's
+   LinkedIn pill: light green at rest, darker mint on hover (clean colour swap,
+   no glow). Layers on the .sb-btn base (radius, transitions, pressed/disabled).
+   ---------------------------------------------------------------------------- */
+.sb-btn--special{
+  width:100%;
+  background:var(--btn-special-bg); color:var(--btn-special-fg);
+  padding:var(--btn-special-pad-y) var(--btn-special-pad-x);
+  font-family:var(--btn-special-family); font-size:var(--btn-special-size); font-weight:var(--btn-special-weight); letter-spacing:var(--btn-special-spacing);
+}
+.sb-btn--special:hover,.sb-btn--special.is-hover{ background:var(--btn-special-bg-hover); }
+
+/* Frosted variant - the team card's email/phone pill: dark translucent glass
+   over a portrait, hairline border, backdrop blur, white text. Layers on
+   .sb-btn--special (keeps its width/padding/font); only colour + glass change. */
+.sb-btn--special.sb-btn--frosted{
+  background:var(--btn-special-frosted-bg); color:var(--btn-special-frosted-fg);
+  border-color:var(--btn-special-frosted-border);
+  -webkit-backdrop-filter:blur(var(--btn-special-frosted-blur)); backdrop-filter:blur(var(--btn-special-frosted-blur));
+}
+.sb-btn--special.sb-btn--frosted:hover,.sb-btn--special.sb-btn--frosted.is-hover{
+  background:var(--btn-special-frosted-bg-hover); border-color:var(--btn-special-frosted-border-hover);
+}
+
+/* ----------------------------------------------------------------------------
+   Input - one canonical control for <input>, <select> and <textarea>. Consumes
+   the --input-* tokens. Used by the careers & request-demo forms.
+   ---------------------------------------------------------------------------- */
+.sb-input{
+  width:100%; box-sizing:border-box;
+  height:var(--input-height);
+  padding:0 var(--input-pad-x);
+  font-family:var(--input-font-family); font-size:var(--input-font-size); font-weight:var(--input-font-weight); letter-spacing:var(--input-font-spacing);
+  color:var(--input-fg); background:var(--input-bg);
+  border:1px solid var(--input-border); border-radius:var(--input-radius);
+  outline:none;
+  transition:border-color .2s var(--ease);
+}
+.sb-input::placeholder{ color:var(--input-placeholder); }
+.sb-input:focus{ border-color:var(--input-border-focus); }
+.sb-input:disabled{ opacity:.6; cursor:default; }
+textarea.sb-input{ height:auto; min-height:var(--input-textarea-min-h); padding:var(--input-pad-y) var(--input-pad-x); resize:vertical; }
+select.sb-input{
+  appearance:none; -webkit-appearance:none; cursor:pointer;
+  background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239B9FA7' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right var(--input-pad-x) center;
+}
+select.sb-input:invalid{ color:var(--input-placeholder); }

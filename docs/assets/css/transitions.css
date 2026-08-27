@@ -1,0 +1,99 @@
+/* ============================================================================
+   Streetbeat - cross-page transition (Astro ClientRouter + View Transitions)
+
+   The site's signature section motion (the compliance card: grow-over + blur
+   the chapter beneath) promoted to page navigation:
+
+     • OLD page - blurs, dims and slides up/back (it "hands off").
+     • NEW page - rises from below as a rounded, slightly-scaled card and
+       grows to cover the screen, becoming the page.
+     • NAV - persisted DOM with its own view-transition-name, so it never
+       redraws: it stays fixed and crisp on top while the pages swap under it.
+
+   We deliberately animate the ROOT snapshots (viewport-sized) instead of
+   naming the tall page container - element snapshots of a 5000px page scale
+   about their own huge box and shear off-screen; root snapshots are exactly
+   the viewport, so the card reads correctly at any scroll position.
+
+   All timings/feel come from the --pt-* tokens in tokens.css. Linked only by
+   the Astro layout (site/layouts/Site.astro).
+   ============================================================================ */
+
+/* Backdrop revealed behind the outgoing page while the card rises. */
+::view-transition {
+    background: var(--pt-backdrop);
+}
+
+/* Old page: fade + rise + de-focus - the reveal vocabulary, leaving. */
+::view-transition-old(root) {
+    animation: sb-page-out var(--pt-out-duration) var(--ease) both;
+    transform-origin: 50% 42%;
+}
+
+/* New page: the card. Holds below for --pt-in-delay while the old page
+   begins its exit (fill-mode both parks it at the from-state), then rises,
+   straightens, corners relax to full bleed. */
+::view-transition-new(root) {
+    animation: sb-page-in var(--pt-in-duration) var(--ease) var(--pt-in-delay) both;
+    transform-origin: 50% 100%;
+}
+
+@keyframes sb-page-out {
+    to {
+        opacity: 0;
+        transform: translateY(calc(var(--pt-out-rise) * -1)) scale(var(--pt-out-scale));
+        filter: blur(var(--pt-blur));
+    }
+}
+
+/* The card's rounded corners are cut with clip-path (the compliance-card
+   technique): view-transition snapshots may paint "ink overflow" that plain
+   border-radius doesn't clip, but clip-path always does - and inset(round)
+   interpolates smoothly back to square as the card grows to full bleed. */
+/* No opacity ramp: the card is fully opaque and simply travels up from
+   below the viewport - anything less reads as "fade in, then slide".
+   Rounding sits on the TOP corners only (the card rises, so its top edge is
+   the only edge ever seen) and HOLDS until 80% of the timeline - by then the
+   card has essentially docked - before relaxing to square in the final beat. */
+@keyframes sb-page-in {
+    from {
+        transform: translateY(var(--pt-card-rise)) scale(var(--pt-card-scale));
+        clip-path: inset(0 round var(--pt-card-radius) var(--pt-card-radius) 0 0);
+        box-shadow: var(--pt-card-shadow);
+    }
+    80% {
+        clip-path: inset(0 round var(--pt-card-radius) var(--pt-card-radius) 0 0);
+    }
+    to {
+        transform: none;
+        clip-path: inset(0 round 0 0 0 0);
+        box-shadow: 0 0 0 transparent;
+    }
+}
+
+/* The nav's view-transition-name exists ONLY while a transition runs.
+   Astro's transition:name applies it permanently - but in Chromium a named
+   element becomes its own backdrop root, which silences the pill's
+   backdrop-filter even at rest (the frosted blur stops sampling the page).
+   #nav out-specifies Astro's [data-astro-transition-scope] rule; the name
+   snaps back the moment a navigation starts, so the nav still rides crisp
+   and fixed above the page swap. */
+#nav { view-transition-name: none; }
+html:active-view-transition #nav { view-transition-name: site-nav; }
+
+/* The persisted chrome rides above the swapping pages, untouched. */
+::view-transition-group(site-nav) {
+    z-index: var(--z-nav);
+    animation: none;
+}
+::view-transition-old(site-nav),
+::view-transition-new(site-nav) {
+    animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation: none;
+    }
+}

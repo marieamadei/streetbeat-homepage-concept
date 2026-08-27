@@ -1,0 +1,236 @@
+/* ============================================================================
+   Streetbeat - shared page chrome (Astro pilot)
+   The section primitives + shared footer styles that every legacy subpage
+   carries inline (verified byte-identical across security/careers/patents/…),
+   extracted once for the Astro layout. Legacy pages keep their inline copies
+   until they are ported; this file is linked only by site/layouts/Site.astro.
+
+   Depends on tokens.css + typography.css (must be linked before this file).
+   ============================================================================ */
+
+.wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
+
+/* Pills - used by heroes, navs and footers. Text style: Eyebrow/S */
+.pill {
+    font-family: var(--ts-eyebrow-s-family); font-size: var(--ts-eyebrow-s-size);
+    font-weight: var(--ts-eyebrow-s-weight); line-height: var(--ts-eyebrow-s-line);
+    letter-spacing: var(--ts-eyebrow-s-spacing);
+    padding: var(--space-10) var(--space-20); border-radius: var(--radius-pill); white-space: nowrap;
+    display: inline-flex; align-items: center; gap: var(--space-8);
+    transition: transform 0.2s var(--ease), background 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+.pill:active { transform: scale(0.97); }
+.pill-dark { background: var(--surface-dark); color: var(--text-on-dark-primary); }
+.pill-dark:hover { background: var(--surface-dark-soft-raised); color: var(--text-on-dark-primary); }
+.pill-green { background: var(--accent-green); color: var(--text-primary); }
+.pill-green:hover { background: var(--accent-green-bright); box-shadow: var(--glow-pill-green); }
+.pill-cyan { background: var(--accent-cyan); color: var(--text-primary); }
+.pill-cyan:hover { background: var(--accent-cyan-bright); box-shadow: var(--glow-pill-cyan); }
+.pill-ghost { border: 1px solid var(--border-subtle); color: var(--text-primary); }
+.pill-ghost:hover { border-color: var(--text-primary); }
+.pill-ghost-dark { border: 1px solid var(--border-on-dark-strong); color: var(--text-on-dark-primary); }
+.pill-ghost-dark:hover { border-color: var(--text-on-dark-primary); }
+
+/* ============ CONSTRUCTION LINES (fixed page-level blade pattern) ============
+   assets/js/construction-lines.js adds `lines-on` to <html> while its fixed
+   pattern layer is armed. Opaque-WHITE heroes go transparent then: the tint
+   underlay already paints the white canvas behind them (the stop map clamps
+   to the first --surface-canvas marker), so the only visual change is that
+   the pattern shows through - exactly the intent. Dark heroes keep their
+   surface (security's sits on the .dark-stage, handled by that page). */
+html.lines-on .hero { background: transparent; }
+html.lines-on .sp-hero:not(.sp-hero--dark) { background: transparent; }
+/* The footer too: its white canvas goes transparent so the lines run on
+   through the gutters around the dark footer card (every page's tint map
+   clamps to --surface-canvas at the bottom, so the underlay is white here);
+   the masked media card itself still occludes them like any other card. */
+html.lines-on .footer { background: transparent; }
+
+/* ============ SHARED SECTION PRIMITIVES ============ */
+.section { padding-top: clamp(88px, 11vw, 150px); padding-bottom: clamp(88px, 11vw, 150px); }
+.section[id] { scroll-margin-top: calc(var(--space-14) + var(--space-64) + var(--space-12)); }
+.section > .wrap { width: 100%; }
+.bg-gray { background: var(--surface-subtle); }
+.bg-dark { background: var(--surface-dark-soft); }
+
+/* Text style: Eyebrow/L */
+.eyebrow {
+    font-family: var(--ts-eyebrow-l-family); font-size: var(--ts-eyebrow-l-size);
+    font-weight: var(--ts-eyebrow-l-weight); line-height: var(--ts-eyebrow-l-line);
+    letter-spacing: var(--ts-eyebrow-l-spacing); color: var(--text-tertiary);
+    display: inline-flex; align-items: center; gap: var(--space-12); margin-bottom: clamp(18px, 2.4vw, 28px);
+}
+/* Text style: Heading/L (hero) */
+.display {
+    font-family: var(--ts-heading-l-family); font-size: var(--ts-heading-l-size);
+    font-weight: var(--ts-heading-l-weight); letter-spacing: var(--ts-heading-l-spacing);
+    line-height: var(--ts-heading-l-line); color: var(--text-primary);
+}
+/* Text style: Heading/M (section headlines) */
+.display-m {
+    font-family: var(--ts-heading-m-family); font-size: var(--ts-heading-m-size);
+    font-weight: var(--ts-heading-m-weight); letter-spacing: var(--ts-heading-m-spacing);
+    line-height: var(--ts-heading-m-line); color: var(--text-primary);
+}
+/* Text style: Body/XL (leads) */
+.lead {
+    font-family: var(--ts-body-xl-family); font-size: var(--ts-body-xl-size);
+    font-weight: var(--ts-body-xl-weight); line-height: var(--ts-body-xl-line);
+    letter-spacing: var(--ts-body-xl-spacing); color: var(--text-secondary);
+}
+
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-16); margin-top: clamp(28px, 3.4vw, 40px); }
+
+/* ============ FOOTER (shared homepage footer) ============ */
+.footer {
+    background: var(--surface-canvas);
+    /* Same site floor as the page/nav (it inherits body's, but keep it explicit
+       so the footer layer holds independently of its context). */
+    min-width: var(--site-min);
+    /* Clear the fixed nav (14px offset + 56px pill) + 24px breathing room */
+    padding-top: calc(14px + 56px + 24px);
+    padding-bottom: var(--footer-space);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100svh;
+}
+.footer > .wrap {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+.footer-union {
+    position: relative;
+    border-radius: var(--radius-footer);
+    overflow: hidden;
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+.footer-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    --l1: 0px; --l2: 0px; --l3: 0px; --l4: 0px; --l5: 0px;
+    --l6: 0px; --l7: 0px; --l8: 0px; --l9: 0px; --l10: 0px;
+    -webkit-mask-image:
+        url(../logo/streetbeat-footer-card-mask.svg),
+        url(../logo/fw-1.svg), url(../logo/fw-2.svg), url(../logo/fw-3.svg),
+        url(../logo/fw-4.svg), url(../logo/fw-5.svg), url(../logo/fw-6.svg),
+        url(../logo/fw-7.svg), url(../logo/fw-8.svg), url(../logo/fw-9.svg),
+        url(../logo/fw-10.svg);
+            mask-image:
+        url(../logo/streetbeat-footer-card-mask.svg),
+        url(../logo/fw-1.svg), url(../logo/fw-2.svg), url(../logo/fw-3.svg),
+        url(../logo/fw-4.svg), url(../logo/fw-5.svg), url(../logo/fw-6.svg),
+        url(../logo/fw-7.svg), url(../logo/fw-8.svg), url(../logo/fw-9.svg),
+        url(../logo/fw-10.svg);
+    -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+    -webkit-mask-size: 100% auto;
+            mask-size: 100% auto;
+    -webkit-mask-position:
+        center top,
+        center var(--l1), center var(--l2), center var(--l3),
+        center var(--l4), center var(--l5), center var(--l6),
+        center var(--l7), center var(--l8), center var(--l9),
+        center var(--l10);
+            mask-position:
+        center top,
+        center var(--l1), center var(--l2), center var(--l3),
+        center var(--l4), center var(--l5), center var(--l6),
+        center var(--l7), center var(--l8), center var(--l9),
+        center var(--l10);
+    -webkit-mask-mode: alpha;
+            mask-mode: alpha;
+    pointer-events: none;
+}
+.footer-bg-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.footer-media-shade {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(80% 120% at 86% 58%, var(--footer-glow), transparent 46%),
+        linear-gradient(to bottom,
+            transparent 0%,
+            transparent 14%,
+            var(--footer-shade-mid) 34%,
+            var(--footer-shade-deep) 100%);
+    pointer-events: none;
+}
+.footer-word {
+    position: relative;
+    z-index: var(--z-raised);
+    width: 100%;
+    aspect-ratio: 1440 / 206;
+    pointer-events: none;
+}
+.footer-card {
+    position: relative;
+    z-index: var(--z-raised);
+    padding: clamp(48px, 7vw, 110px) var(--pad) clamp(40px, 4vw, 64px);
+    color: var(--text-on-dark-primary);
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.footer-cta, .footer-links { position: relative; z-index: var(--z-raised); }
+.footer-cta { text-align: center; max-width: 760px; margin: 0 auto; }
+/* Text style: Heading/L */
+.footer-cta h2 { font-family: var(--ts-heading-l-family); font-size: var(--ts-heading-l-size); font-weight: var(--ts-heading-l-weight); letter-spacing: var(--ts-heading-l-spacing); line-height: var(--ts-heading-l-line); color: var(--text-on-dark-primary); }
+/* Text style: Body/XL */
+.footer-cta .sub { font-family: var(--ts-body-xl-family); font-size: var(--ts-body-xl-size); font-weight: var(--ts-body-xl-weight); line-height: var(--ts-body-xl-line); letter-spacing: var(--ts-body-xl-spacing); color: var(--text-on-dark-muted); margin-top: var(--space-6); }
+.footer-cta .pill-green { display: inline-block; margin-top: var(--footer-cta-space); padding: var(--space-16) var(--space-32); }
+.footer-cta .hero-actions { justify-content: center; }
+.footer-cta .hero-actions .pill { padding: var(--space-16) var(--space-32); }
+.footer-cta .hero-actions .pill-green { display: inline-flex; margin-top: 0; }
+/* CTA float-up spans (.tr-word/.tr-char) are created by title-reveal.js with
+   inline styles - no rules needed here. */
+.socials { display: flex; justify-content: center; gap: var(--space-12); margin-top: var(--footer-socials-space); }
+.socials a {
+    width: 40px; height: 40px; border-radius: var(--radius-round);
+    background: var(--surface-on-dark-soft);
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+}
+.socials a:hover { background: var(--accent-green); transform: translateY(-3px); }
+.socials svg { width: 17px; height: 17px; fill: var(--text-on-dark-primary); }
+.footer-links {
+    display: flex; flex-wrap: wrap; gap: var(--space-40) var(--space-64);
+    margin-top: clamp(60px, 8vw, 120px);
+}
+.footer-col { display: flex; flex-direction: column; gap: var(--space-12); }
+/* Text style: Label/XS */
+.footer-col h3 { font-family: var(--ts-label-xs-family); font-size: var(--ts-label-xs-size); font-weight: var(--ts-label-xs-weight); line-height: var(--ts-label-xs-line); letter-spacing: var(--ts-label-xs-spacing); text-transform: var(--ts-label-xs-case); color: var(--text-on-dark-label); margin-bottom: var(--space-6); }
+/* Text style: Body/Base */
+.footer-col a, .footer-col p, .footer-cookie-settings { font-family: var(--ts-body-base-family); font-size: var(--ts-body-base-size); font-weight: var(--ts-body-base-weight); line-height: var(--ts-body-base-line); letter-spacing: var(--ts-body-base-spacing); color: var(--text-on-dark-link); transition: color 0.2s; }
+.footer-col a:hover, .footer-cookie-settings:hover { color: var(--text-on-dark-primary); }
+.footer-cookie-settings { width: fit-content; margin: 0; padding: 0; border: 0; background: none; text-align: left; cursor: pointer; }
+.footer-contact { margin-left: auto; text-align: right; padding-top: var(--footer-space); }
+.footer-contact .socials { justify-content: flex-end; margin-top: var(--space-20); margin-bottom: 0; }
+.footer-contact a { color: var(--accent-green-bright); }
+/* Text style: Body/Base */
+.copyright { font-family: var(--ts-body-base-family); font-size: var(--ts-body-base-size); font-weight: var(--ts-body-base-weight); line-height: var(--ts-body-base-line); letter-spacing: var(--ts-body-base-spacing); color: var(--text-tertiary); margin-top: var(--footer-space); padding: 0 var(--space-4); text-align: center; }
+
+.comp-char { will-change: opacity, color; }
+::selection { background: var(--selection-bg); color: var(--text-primary); }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent-green); outline-offset: 3px; border-radius: var(--radius-focus); }
+
+/* ============ RESPONSIVE (shared) ============ */
+@media (max-width: 900px) {
+    .footer-contact { margin-left: 0; text-align: left; flex-basis: 100%; }
+}
+@media (max-width: 600px) {
+    .section { padding-top: clamp(72px, 15vw, 100px); padding-bottom: clamp(72px, 15vw, 100px); }
+}
+@media (prefers-reduced-motion: reduce) {
+    [data-reveal-item], [data-reveal-group] { opacity: 1 !important; transform: none !important; filter: none !important; }
+}

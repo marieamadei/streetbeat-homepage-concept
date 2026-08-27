@@ -1,0 +1,241 @@
+/* ============================================================================
+   Streetbeat - Base
+   Foundational reset + base element styles + page container, shared by EVERY
+   page through the Site.astro layout (homepage included - post Astro migration
+   there is no separate bespoke homepage base).
+
+   Depends on assets/css/tokens.css (colors, --max-width) and
+   assets/css/typography.css (--ts-body-base-* type tokens), which must be linked
+   before this file.
+   ============================================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Root-level horizontal clip. Full-bleed sections are contained at their own
+   box (see the team stage), but this is the page-wide backstop: a clip on the
+   ROOT element is applied to the viewport itself, so any stray horizontal
+   overrun can never widen the layout viewport and trigger the mobile zoom-out /
+   "everything creeps off screen" failure. `clip` (not `hidden`) keeps overflow-y
+   `visible` - the window still scrolls vertically, no second scroll container to
+   fight the overlay scrollbar or GSAP pins. Mirrors the body floor below. */
+/* Smooth anchor motion is driven explicitly by Site.astro after pinned-section
+   geometry has settled. Keeping it on the root makes every programmatic scroll
+   (including ScrollTrigger's refresh corrections and browser hash restoration)
+   animate through stale intermediate measurements, which can pin a later
+   chapter while the sticky hero is still onscreen. */
+html { overflow-x: clip; }
+
+/* Text style: Body/Base */
+body {
+    font-family: var(--ts-body-base-family);
+    font-size: var(--ts-body-base-size);
+    font-weight: var(--ts-body-base-weight);
+    line-height: var(--ts-body-base-line);
+    letter-spacing: var(--ts-body-base-spacing);
+    background: var(--surface-canvas);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    /* Site floor (--site-min): below it the page holds this width and the
+       viewport scrolls horizontally rather than reflowing further. (body's
+       overflow-x clip below only clips its OWN overflow to this width; the
+       window still scrolls to show the full body when narrower.) The fixed nav
+       and the footer carry the same floor so all three chrome layers agree. */
+    min-width: var(--site-min);
+    /* Full-bleed sections (TeamCarousel's 100vw 3D ring, the pinned LogoCloud
+       runway) are authored to overrun the page edges and be clipped here - the
+       legacy homepage set this on <body> and the Astro migration dropped it,
+       which is what let that overflow become a page-wide horizontal scroll.
+       `clip` (not `hidden`) so <body> never becomes a nested scroll container:
+       `overflow-x: hidden` would force overflow-y to compute to `auto`, adding a
+       second vertical scroller that fights the overlay scrollbar + GSAP pins. */
+    overflow-x: clip;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.skip-link {
+    position: fixed;
+    top: var(--space-12);
+    left: var(--space-12);
+    z-index: var(--z-skip-link);
+    padding: var(--space-12) var(--space-16);
+    border-radius: var(--radius-pill);
+    background: var(--surface-dark);
+    color: var(--text-on-dark-primary);
+    transform: translateY(calc(-100% - var(--space-16)));
+    transition: transform 0.2s var(--ease);
+}
+.skip-link:focus-visible { transform: translateY(0); }
+#page:focus { outline: none; }
+
+/* Cookie choices remain available from the footer and Cookie Policy page.
+   Cookiebot's persistent floating shortcut is intentionally not displayed. */
+#CookiebotWidget,
+#CookiebotWidgetUnderlay {
+    display: none !important;
+}
+
+/* Let the branded homepage arrival finish before consent enters. Cookiebot's
+   full preference view keeps its native modal layout; only the first prompt is
+   reduced to a compact corner card. */
+.hero-intro #CybotCookiebotDialog {
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+html body #CybotCookiebotDialog.CybotEdge.CybotCookiebotDialogActive {
+    inset: auto var(--space-20) var(--space-20) auto !important;
+    width: min(calc(100vw - (2 * var(--space-20))), var(--cookie-banner-max)) !important;
+    min-width: 0 !important;
+    max-width: var(--cookie-banner-max) !important;
+    height: auto !important;
+    max-height: calc(100dvh - (2 * var(--space-20))) !important;
+    padding: 0 !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-md) !important;
+    background: var(--surface-canvas) !important;
+    box-shadow: var(--shadow-nav-pill) !important;
+    font-family: var(--ts-body-base-family) !important;
+    transform: none !important;
+}
+
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogHeader,
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogNav,
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyLevelWrapper,
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyLevelButtonLevelOptinAllowallSelection {
+    display: none !important;
+}
+
+#CybotCookiebotDialog.CybotEdge .CybotCookiebotFader {
+    display: none !important;
+}
+
+#CybotCookiebotDialog.CybotEdge .CybotCookiebotDialogContentWrapper,
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogTabContent,
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBody {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+}
+
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBody > .CybotCookiebotScrollContainer,
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyContent {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+}
+
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBody > .CybotCookiebotScrollContainer {
+    padding: 0 !important;
+}
+
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyContent {
+    padding: var(--space-20) var(--space-20) var(--space-12) !important;
+    overflow: visible !important;
+}
+
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyContentTitle {
+    margin-bottom: var(--space-8) !important;
+    font-family: var(--ts-heading-3xs-family) !important;
+    font-size: var(--ts-heading-3xs-size) !important;
+    font-weight: var(--ts-heading-3xs-weight) !important;
+    line-height: var(--ts-heading-3xs-line) !important;
+    letter-spacing: var(--ts-heading-3xs-spacing) !important;
+}
+
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyContentText {
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    font-family: var(--ts-body-xs-family) !important;
+    font-size: var(--ts-body-xs-size) !important;
+    font-weight: var(--ts-body-xs-weight) !important;
+    line-height: var(--ts-body-xs-line) !important;
+    letter-spacing: var(--ts-body-xs-spacing) !important;
+}
+
+#CybotCookiebotDialog.CybotEdge .CybotCookiebotDialogBodyBottomWrapper {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 var(--space-20) var(--space-12) !important;
+}
+
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyEdgeMoreDetails {
+    justify-content: flex-start !important;
+    margin: 0 !important;
+}
+
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogFooter {
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 0 var(--space-20) var(--space-20) !important;
+}
+
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyButtons {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyButtonsWrapper {
+    display: grid !important;
+    width: 100% !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: var(--space-8) !important;
+}
+
+#CybotCookiebotDialog.CybotEdge .CybotCookiebotDialogBodyButton {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: var(--space-40) !important;
+    margin: 0 !important;
+    padding: var(--space-8) var(--space-16) !important;
+    border-radius: var(--radius-pill) !important;
+    font-family: var(--ts-label-s-family) !important;
+    font-size: var(--ts-label-s-size) !important;
+    font-weight: var(--ts-label-s-weight) !important;
+    line-height: var(--ts-label-s-line) !important;
+    letter-spacing: var(--ts-label-s-spacing) !important;
+}
+
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll {
+    border-color: var(--brand-primary) !important;
+    background: var(--brand-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyButtonDecline {
+    border-color: var(--border-default) !important;
+    background: var(--surface-subtle) !important;
+    color: var(--text-primary) !important;
+}
+
+#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyEdgeMoreDetailsLink {
+    color: var(--text-accent-green-primary) !important;
+}
+
+@media (max-width: 600px) {
+    html body #CybotCookiebotDialog.CybotEdge.CybotCookiebotDialogActive {
+        right: var(--space-12) !important;
+        bottom: var(--space-12) !important;
+        width: calc(100vw - (2 * var(--space-12))) !important;
+        max-height: calc(100dvh - (2 * var(--space-12))) !important;
+    }
+}
+
+.container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-24);
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}

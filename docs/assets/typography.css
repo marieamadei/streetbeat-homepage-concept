@@ -1,0 +1,107 @@
+/* ============================================================================
+   Streetbeat - Typography
+   Imported 1:1 from the Figma "Website" file text styles
+   (file PDwYqiAvxXmPrexXjFrspw). This is the SINGLE SOURCE OF TRUTH for all
+   typography on the site. Every text element must use one of the .ts-* classes
+   (or the matching --ts-* tokens). Never hand-write font-size / font-weight /
+   line-height / letter-spacing values - always reference a style below.
+
+   Family: self-hosted Inter for display, headings, and body copy.
+   Figma sizes are the desktop (max) anchor; large styles scale fluidly with
+   clamp() so the type ramp stays usable on small screens. Line-heights and
+   letter-spacing are the exact Figma values.
+   ============================================================================ */
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('/streetbeat-homepage-concept/assets/fonts/inter/InterVariable.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('/streetbeat-homepage-concept/assets/fonts/inter/InterVariable-Italic.woff2') format('woff2');
+}
+
+:root {
+    /* Type families (mirrors each page's :root) */
+    --ts-font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --ts-font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    /* ---- Display · Inter Regular · lh 90% · ls -3% ---- */
+    --ts-display-xl-family: var(--ts-font-display); --ts-display-xl-weight: 400; --ts-display-xl-size: clamp(64px, calc(25.37px + 9.9048vw), 168px); --ts-display-xl-line: 0.9;  --ts-display-xl-spacing: -0.03em; --ts-display-xl-case: none;
+    --ts-display-l-family: var(--ts-font-display);  --ts-display-l-weight: 400;  --ts-display-l-size: clamp(52px, calc(20.8px + 8vw), 136px);       --ts-display-l-line: 0.9;   --ts-display-l-spacing: -0.03em;  --ts-display-l-case: none;
+    --ts-display-m-family: var(--ts-font-display);  --ts-display-m-weight: 400;  --ts-display-m-size: clamp(46px, calc(24.46px + 5.5238vw), 104px); --ts-display-m-line: 0.9;   --ts-display-m-spacing: -0.03em;  --ts-display-m-case: none;
+
+    /* ---- Heading · Inter SemiBold ---- */
+    --ts-heading-2xl-family: var(--ts-font-display); --ts-heading-2xl-weight: 600; --ts-heading-2xl-size: clamp(46px, calc(18.51px + 7.0476vw), 120px); --ts-heading-2xl-line: 1;    --ts-heading-2xl-spacing: -0.02em; --ts-heading-2xl-case: none;
+    --ts-heading-xl-family: var(--ts-font-display);  --ts-heading-xl-weight: 600;  --ts-heading-xl-size: clamp(40px, calc(16.23px + 6.0952vw), 104px);  --ts-heading-xl-line: 1;     --ts-heading-xl-spacing: -0.02em;  --ts-heading-xl-case: none;
+    --ts-heading-l-family: var(--ts-font-display);   --ts-heading-l-weight: 600;   --ts-heading-l-size: clamp(38px, calc(22.4px + 4vw), 80px);          --ts-heading-l-line: 1;      --ts-heading-l-spacing: -0.02em;   --ts-heading-l-case: none;
+    --ts-heading-m-family: var(--ts-font-display);   --ts-heading-m-weight: 600;   --ts-heading-m-size: clamp(32px, calc(20.11px + 3.0476vw), 64px);    --ts-heading-m-line: 1;      --ts-heading-m-spacing: -0.02em;   --ts-heading-m-case: none;
+    --ts-heading-s-family: var(--ts-font-display);   --ts-heading-s-weight: 600;   --ts-heading-s-size: clamp(30px, calc(20.34px + 2.4762vw), 56px);    --ts-heading-s-line: 1;      --ts-heading-s-spacing: -0.02em;   --ts-heading-s-case: none;
+    --ts-heading-xs-family: var(--ts-font-display);  --ts-heading-xs-weight: 600;  --ts-heading-xs-size: clamp(28px, 3.3vw, 48px);   --ts-heading-xs-line: 1;     --ts-heading-xs-spacing: -0.01em;  --ts-heading-xs-case: none;
+    --ts-heading-2xs-family: var(--ts-font-display); --ts-heading-2xs-weight: 600; --ts-heading-2xs-size: clamp(26px, 2.5vw, 36px);  --ts-heading-2xs-line: 1;    --ts-heading-2xs-spacing: -0.01em; --ts-heading-2xs-case: none;
+    --ts-heading-3xs-family: var(--ts-font-display); --ts-heading-3xs-weight: 600; --ts-heading-3xs-size: clamp(22px, 2.08vw, 30px); --ts-heading-3xs-line: 1.05; --ts-heading-3xs-spacing: -0.01em; --ts-heading-3xs-case: none;
+
+    /* ---- Title · Inter Semi Bold ---- */
+    --ts-title-hero-subtitle-family: var(--ts-font-body); --ts-title-hero-subtitle-weight: 600; --ts-title-hero-subtitle-size: clamp(28px, calc(18.34px + 2.4762vw), 54px); --ts-title-hero-subtitle-line: 1; --ts-title-hero-subtitle-spacing: -0.04em; --ts-title-hero-subtitle-case: none;
+
+    /* ---- Body · Inter Regular ---- */
+    --ts-body-xl-family: var(--ts-font-body);   --ts-body-xl-weight: 400;   --ts-body-xl-size: clamp(20px, calc(17.03px + 0.7619vw), 28px); --ts-body-xl-line: 1.6;  --ts-body-xl-spacing: 0; --ts-body-xl-case: none;
+    --ts-body-l-family: var(--ts-font-body);    --ts-body-l-weight: 400;    --ts-body-l-size: clamp(18px, 1.7vw, 24px);   --ts-body-l-line: 1.5;   --ts-body-l-spacing: 0;  --ts-body-l-case: none;
+    --ts-body-m-family: var(--ts-font-body);    --ts-body-m-weight: 400;    --ts-body-m-size: clamp(16px, 1.4vw, 20px);   --ts-body-m-line: 1.4;   --ts-body-m-spacing: 0;  --ts-body-m-case: none;
+    --ts-body-base-family: var(--ts-font-body); --ts-body-base-weight: 400; --ts-body-base-size: 16px;                    --ts-body-base-line: 1.5; --ts-body-base-spacing: 0; --ts-body-base-case: none;
+    /* NEW - not yet in the Figma "Website" file. Fine-print / disclaimer size,
+       one step below base (fixed 14px, no clamp). Add to Figma + re-import to
+       restore the 1:1 mapping. */
+    --ts-body-xs-family: var(--ts-font-body);   --ts-body-xs-weight: 400;   --ts-body-xs-size: 14px;                      --ts-body-xs-line: 1.5;  --ts-body-xs-spacing: 0; --ts-body-xs-case: none;
+
+    /* ---- Eyebrow · Inter Semi Bold · lh 120% ---- */
+    --ts-eyebrow-l-family: var(--ts-font-body); --ts-eyebrow-l-weight: 600; --ts-eyebrow-l-size: clamp(16px, 1.7vw, 24px); --ts-eyebrow-l-line: 1.2; --ts-eyebrow-l-spacing: 0; --ts-eyebrow-l-case: none;
+    --ts-eyebrow-m-family: var(--ts-font-body); --ts-eyebrow-m-weight: 600; --ts-eyebrow-m-size: clamp(15px, 1.4vw, 20px); --ts-eyebrow-m-line: 1.2; --ts-eyebrow-m-spacing: 0; --ts-eyebrow-m-case: none;
+    --ts-eyebrow-s-family: var(--ts-font-body); --ts-eyebrow-s-weight: 600; --ts-eyebrow-s-size: 16px;                    --ts-eyebrow-s-line: 1.2; --ts-eyebrow-s-spacing: 0; --ts-eyebrow-s-case: none;
+
+    /* ---- Label · Inter Medium · lh 100% · ls 2% · UPPERCASE ---- */
+    --ts-label-l-family: var(--ts-font-body);  --ts-label-l-weight: 500;  --ts-label-l-size: 18px; --ts-label-l-line: 1; --ts-label-l-spacing: 0.07em; --ts-label-l-case: none;
+    --ts-label-m-family: var(--ts-font-body);  --ts-label-m-weight: 500;  --ts-label-m-size: 16px; --ts-label-m-line: 1; --ts-label-m-spacing: 0.08em; --ts-label-m-case: none;
+    --ts-label-s-family: var(--ts-font-body);  --ts-label-s-weight: 500;  --ts-label-s-size: 14px; --ts-label-s-line: 1; --ts-label-s-spacing: 0.09em; --ts-label-s-case: none;
+    --ts-label-xs-family: var(--ts-font-body); --ts-label-xs-weight: 500; --ts-label-xs-size: 12px; --ts-label-xs-line: 1; --ts-label-xs-spacing: 0.1em; --ts-label-xs-case: none;
+}
+
+/* ============================================================================
+   Utility classes - apply one per text element.
+   ============================================================================ */
+.ts-display-xl { font-family: var(--ts-display-xl-family); font-weight: var(--ts-display-xl-weight); font-size: var(--ts-display-xl-size); line-height: var(--ts-display-xl-line); letter-spacing: var(--ts-display-xl-spacing); text-transform: var(--ts-display-xl-case); }
+.ts-display-l  { font-family: var(--ts-display-l-family);  font-weight: var(--ts-display-l-weight);  font-size: var(--ts-display-l-size);  line-height: var(--ts-display-l-line);  letter-spacing: var(--ts-display-l-spacing);  text-transform: var(--ts-display-l-case); }
+.ts-display-m  { font-family: var(--ts-display-m-family);  font-weight: var(--ts-display-m-weight);  font-size: var(--ts-display-m-size);  line-height: var(--ts-display-m-line);  letter-spacing: var(--ts-display-m-spacing);  text-transform: var(--ts-display-m-case); }
+
+.ts-heading-2xl { font-family: var(--ts-heading-2xl-family); font-weight: var(--ts-heading-2xl-weight); font-size: var(--ts-heading-2xl-size); line-height: var(--ts-heading-2xl-line); letter-spacing: var(--ts-heading-2xl-spacing); text-transform: var(--ts-heading-2xl-case); }
+.ts-heading-xl  { font-family: var(--ts-heading-xl-family);  font-weight: var(--ts-heading-xl-weight);  font-size: var(--ts-heading-xl-size);  line-height: var(--ts-heading-xl-line);  letter-spacing: var(--ts-heading-xl-spacing);  text-transform: var(--ts-heading-xl-case); }
+.ts-heading-l   { font-family: var(--ts-heading-l-family);   font-weight: var(--ts-heading-l-weight);   font-size: var(--ts-heading-l-size);   line-height: var(--ts-heading-l-line);   letter-spacing: var(--ts-heading-l-spacing);   text-transform: var(--ts-heading-l-case); }
+.ts-heading-m   { font-family: var(--ts-heading-m-family);   font-weight: var(--ts-heading-m-weight);   font-size: var(--ts-heading-m-size);   line-height: var(--ts-heading-m-line);   letter-spacing: var(--ts-heading-m-spacing);   text-transform: var(--ts-heading-m-case); }
+.ts-heading-s   { font-family: var(--ts-heading-s-family);   font-weight: var(--ts-heading-s-weight);   font-size: var(--ts-heading-s-size);   line-height: var(--ts-heading-s-line);   letter-spacing: var(--ts-heading-s-spacing);   text-transform: var(--ts-heading-s-case); }
+.ts-heading-xs  { font-family: var(--ts-heading-xs-family);  font-weight: var(--ts-heading-xs-weight);  font-size: var(--ts-heading-xs-size);  line-height: var(--ts-heading-xs-line);  letter-spacing: var(--ts-heading-xs-spacing);  text-transform: var(--ts-heading-xs-case); }
+.ts-heading-2xs { font-family: var(--ts-heading-2xs-family); font-weight: var(--ts-heading-2xs-weight); font-size: var(--ts-heading-2xs-size); line-height: var(--ts-heading-2xs-line); letter-spacing: var(--ts-heading-2xs-spacing); text-transform: var(--ts-heading-2xs-case); }
+.ts-heading-3xs { font-family: var(--ts-heading-3xs-family); font-weight: var(--ts-heading-3xs-weight); font-size: var(--ts-heading-3xs-size); line-height: var(--ts-heading-3xs-line); letter-spacing: var(--ts-heading-3xs-spacing); text-transform: var(--ts-heading-3xs-case); }
+
+.ts-title-hero-subtitle { font-family: var(--ts-title-hero-subtitle-family); font-weight: var(--ts-title-hero-subtitle-weight); font-size: var(--ts-title-hero-subtitle-size); line-height: var(--ts-title-hero-subtitle-line); letter-spacing: var(--ts-title-hero-subtitle-spacing); text-transform: var(--ts-title-hero-subtitle-case); }
+
+.ts-body-xl   { font-family: var(--ts-body-xl-family);   font-weight: var(--ts-body-xl-weight);   font-size: var(--ts-body-xl-size);   line-height: var(--ts-body-xl-line);   letter-spacing: var(--ts-body-xl-spacing);   text-transform: var(--ts-body-xl-case); }
+.ts-body-l    { font-family: var(--ts-body-l-family);    font-weight: var(--ts-body-l-weight);    font-size: var(--ts-body-l-size);    line-height: var(--ts-body-l-line);    letter-spacing: var(--ts-body-l-spacing);    text-transform: var(--ts-body-l-case); }
+.ts-body-m    { font-family: var(--ts-body-m-family);    font-weight: var(--ts-body-m-weight);    font-size: var(--ts-body-m-size);    line-height: var(--ts-body-m-line);    letter-spacing: var(--ts-body-m-spacing);    text-transform: var(--ts-body-m-case); }
+.ts-body-base { font-family: var(--ts-body-base-family); font-weight: var(--ts-body-base-weight); font-size: var(--ts-body-base-size); line-height: var(--ts-body-base-line); letter-spacing: var(--ts-body-base-spacing); text-transform: var(--ts-body-base-case); }
+.ts-body-xs   { font-family: var(--ts-body-xs-family);   font-weight: var(--ts-body-xs-weight);   font-size: var(--ts-body-xs-size);   line-height: var(--ts-body-xs-line);   letter-spacing: var(--ts-body-xs-spacing);   text-transform: var(--ts-body-xs-case); }
+
+.ts-eyebrow-l { font-family: var(--ts-eyebrow-l-family); font-weight: var(--ts-eyebrow-l-weight); font-size: var(--ts-eyebrow-l-size); line-height: var(--ts-eyebrow-l-line); letter-spacing: var(--ts-eyebrow-l-spacing); text-transform: var(--ts-eyebrow-l-case); }
+.ts-eyebrow-m { font-family: var(--ts-eyebrow-m-family); font-weight: var(--ts-eyebrow-m-weight); font-size: var(--ts-eyebrow-m-size); line-height: var(--ts-eyebrow-m-line); letter-spacing: var(--ts-eyebrow-m-spacing); text-transform: var(--ts-eyebrow-m-case); }
+.ts-eyebrow-s { font-family: var(--ts-eyebrow-s-family); font-weight: var(--ts-eyebrow-s-weight); font-size: var(--ts-eyebrow-s-size); line-height: var(--ts-eyebrow-s-line); letter-spacing: var(--ts-eyebrow-s-spacing); text-transform: var(--ts-eyebrow-s-case); }
+
+.ts-label-l  { font-family: var(--ts-label-l-family);  font-weight: var(--ts-label-l-weight);  font-size: var(--ts-label-l-size);  line-height: var(--ts-label-l-line);  letter-spacing: var(--ts-label-l-spacing);  text-transform: var(--ts-label-l-case); }
+.ts-label-m  { font-family: var(--ts-label-m-family);  font-weight: var(--ts-label-m-weight);  font-size: var(--ts-label-m-size);  line-height: var(--ts-label-m-line);  letter-spacing: var(--ts-label-m-spacing);  text-transform: var(--ts-label-m-case); }
+.ts-label-s  { font-family: var(--ts-label-s-family);  font-weight: var(--ts-label-s-weight);  font-size: var(--ts-label-s-size);  line-height: var(--ts-label-s-line);  letter-spacing: var(--ts-label-s-spacing);  text-transform: var(--ts-label-s-case); }
+.ts-label-xs { font-family: var(--ts-label-xs-family); font-weight: var(--ts-label-xs-weight); font-size: var(--ts-label-xs-size); line-height: var(--ts-label-xs-line); letter-spacing: var(--ts-label-xs-spacing); text-transform: var(--ts-label-xs-case); }

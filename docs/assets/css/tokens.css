@@ -1,0 +1,539 @@
+/* ============================================================================
+   Streetbeat - Design Tokens
+   SINGLE SOURCE OF TRUTH for color, surface, layout, shape and motion values.
+   Mirrors the role that assets/typography.css plays for type.
+
+   Every page links this file (assets/css/tokens.css, or ../assets/css/tokens.css
+   from a subfolder) and must consume these variables instead of hand-writing hex
+   values, max-widths, radii or easing curves. Never redefine a token in a page's
+   :root - change it here so it changes everywhere.
+
+   Palette values are locked: the Tier-1 primitives in this file are the source
+   of truth. The homepage is the canonical reference for the exact accent +
+   surface values.
+   ============================================================================ */
+
+/* This file is the PRIMITIVES layer - the single place raw hex is allowed to
+   live. Every other stylesheet must consume these as var(--…) tokens, but the
+   tokens themselves have to resolve to literal values here. The design-lint
+   `color-no-hex` backstop assumes primitives live in JSON; here they live in
+   CSS, so it is disabled for this file only (not globally). */
+/* stylelint-disable color-no-hex */
+:root {
+    /* ========================================================================
+       TIER 1 - PRIMITIVES (120). The ONLY sanctioned home for raw colour hex.
+       Hue-named to mirror the imported Brand Hub. Edited as hex in /ds.
+       In-between steps (25 / 150 / 350 / 450 / 925) hold bespoke values from
+       the shipped pages that fall between the imported ramp steps - promoted
+       here so no raw hex lives outside this tier.
+       ======================================================================== */
+    /* Neutral (15) - 550 is the AA-accessible caption/tertiary gray on white */
+    --c-neutral-0: #FFFFFF;  --c-neutral-50: #FAFAFA; --c-neutral-100: #F5F6F6;
+    --c-neutral-200: #E0E1E3; --c-neutral-300: #C4C4C4; --c-neutral-400: #B5B8BF;
+    --c-neutral-500: #9B9FA7; --c-neutral-550: #6E7178; --c-neutral-600: #4E5157; --c-neutral-700: #34363A;
+    --c-neutral-800: #2A2B2E; --c-neutral-900: #202124; --c-neutral-925: #16171A;
+    --c-neutral-950: #111112; --c-neutral-1000: #000000;
+    /* Green (13) */
+    --c-green-25: #EEFBF2; --c-green-50: #E0FFEB; --c-green-100: #C7FFDA;
+    --c-green-150: #C9F4D9; --c-green-200: #ADFFC9; --c-green-300: #54F68D;
+    --c-green-400: #61FF9B; --c-green-500: #46FE8D; --c-green-600: #2BF076;
+    --c-green-700: #00CC4F; --c-green-800: #00AD3A; --c-green-900: #009431;
+    --c-green-950: #007A29;
+    /* Cyan (14) */
+    --c-cyan-25: #EAF6F7; --c-cyan-50: #E8FCFC; --c-cyan-100: #CFFCFC;
+    --c-cyan-150: #BFE8EA; --c-cyan-200: #B6FCFC; --c-cyan-300: #5BFFFF;
+    --c-cyan-350: #5AF5F0; --c-cyan-400: #05F9F9; --c-cyan-500: #02EDED;
+    --c-cyan-600: #00E8E8; --c-cyan-700: #00CCCB; --c-cyan-800: #04B2AF;
+    --c-cyan-900: #009996; --c-cyan-950: #008387;
+    /* Teal (11) */
+    --c-teal-50: #8DF9F9; --c-teal-100: #31E4F5; --c-teal-200: #00C9F1;
+    --c-teal-300: #00AFE5; --c-teal-400: #069DCC; --c-teal-500: #0689B2;
+    --c-teal-600: #007599; --c-teal-700: #1D677E; --c-teal-800: #265874;
+    --c-teal-900: #115F8B; --c-teal-950: #00507E;
+    /* Blue (11) */
+    --c-blue-50: #B2ECFF; --c-blue-100: #80D4FF; --c-blue-200: #4CB5FF;
+    --c-blue-300: #329DFF; --c-blue-400: #2288E5; --c-blue-500: #0A6FCC;
+    --c-blue-600: #005DB2; --c-blue-700: #004A8F; --c-blue-800: #114189;
+    --c-blue-900: #0F4595; --c-blue-950: #013685;
+    /* Purple (11) */
+    --c-purple-50: #E5D9FF; --c-purple-100: #D4BFFF; --c-purple-200: #B88CFF;
+    --c-purple-300: #B073FF; --c-purple-400: #985CE5; --c-purple-500: #8247CC;
+    --c-purple-600: #6D36B2; --c-purple-700: #5E1FB1; --c-purple-800: #622CA8;
+    --c-purple-900: #55298E; --c-purple-950: #4D1F86;
+    /* Magenta (11) */
+    --c-magenta-50: #FFD4E4; --c-magenta-100: #FFA3C2; --c-magenta-200: #FF6691;
+    --c-magenta-300: #FF4C77; --c-magenta-400: #E53963; --c-magenta-500: #CC294F;
+    --c-magenta-600: #B21B3F; --c-magenta-700: #AD2F4D; --c-magenta-800: #961735;
+    --c-magenta-900: #8F2942; --c-magenta-950: #802E42;
+    /* Red (11) */
+    --c-red-50: #FFDAD4; --c-red-100: #FFA18C; --c-red-200: #FF6D4C;
+    --c-red-300: #FF5833; --c-red-400: #F24D29; --c-red-500: #DE3E1B;
+    --c-red-600: #C42E0E; --c-red-700: #C52316; --c-red-800: #B52E23;
+    --c-red-900: #B50909; --c-red-950: #DE1010;
+    /* Mustard (11) */
+    --c-mustard-50: #FFEDCB; --c-mustard-100: #FFD483; --c-mustard-200: #FFC455;
+    --c-mustard-300: #F0A61B; --c-mustard-400: #C99016; --c-mustard-500: #CF7A16;
+    --c-mustard-600: #9F5A0A; --c-mustard-700: #855318; --c-mustard-800: #853F18;
+    --c-mustard-900: #9B3D1E; --c-mustard-950: #933A1D;
+    /* Yellow (11) */
+    --c-yellow-50: #FBFFD9; --c-yellow-100: #F7FFB2; --c-yellow-200: #F4FF8C;
+    --c-yellow-300: #EEFF59; --c-yellow-400: #E4F249; --c-yellow-500: #D9D936;
+    --c-yellow-600: #CCBE1F; --c-yellow-700: #BFB113; --c-yellow-800: #AB9D08;
+    --c-yellow-900: #9B8E00; --c-yellow-950: #8F8628;
+    /* Red 450 - the Radix-derived loss red used by the trading-app page; a
+       different hue than the imported red ramp, kept as its own step. */
+    --c-red-450: #E5484D;
+    /* Amber (1) - brand secondary accent · Indigo + Pink (1 each) - chart hues
+       outside the 10 ramps; single-step primitives so the aliases link. */
+    --c-amber-500: #E5A000;
+    --c-indigo-500: #6366F1;
+    --c-pink-500: #EC4899;
+
+    /* ========================================================================
+       TIER 2 - SEMANTIC ALIASES. The single alias layer the product consumes.
+       Grouped by property, then role: brand / accent / text / surface /
+       border / feedback / chart. Every alias resolves to a Tier-1 primitive
+       (never raw hex, except deliberate translucent overlays). Light values
+       here; dark counterparts live in .theme-dark below. Naming:
+       --<group>-<role>[-<hierarchy>], hierarchy = primary → secondary →
+       tertiary → faint. "on-dark" = fixed dark surfaces (hero, footer, dark
+       cards) that stay dark in BOTH themes - not theme inversion.
+       ======================================================================== */
+    /* Brand - the two brand identities (B2B green, B2C cyan) */
+    --brand-primary: var(--c-green-700);
+    --brand-secondary: var(--c-cyan-700);
+
+    /* Accent - decorative brand accents (fills, glows, chips, gradients) */
+    --accent-green: var(--c-green-600);        /* primary B2B accent */
+    --accent-green-bright: var(--c-green-500); /* glow / highlight */
+    --accent-green-soft: var(--c-green-50);    /* pale chip / flow gradient stop */
+    --accent-cyan: var(--c-cyan-800);          /* primary B2C accent */
+    --accent-cyan-bright: var(--c-cyan-350);   /* cyan glow */
+    --accent-cyan-soft: var(--c-cyan-50);      /* pale chip / flow gradient stop */
+    --accent-amber: var(--c-amber-500);        /* secondary accent (patents, app) */
+
+    /* Brand angular gradients - exact Streetbeat guideline assets, shared with
+       Brain50. These are the five sanctioned variants; consume the complete
+       token rather than composing new stop combinations in page CSS. Composite
+       gradients cannot resolve through the single-colour primitive layer, so
+       their guideline-authored stop values live here as a deliberate exception.
+       They are theme-independent and therefore need no .theme-dark overrides. */
+    --gradient-green-turquoise-80: conic-gradient(from 90deg at 50% 100%, #46FE8D 0%, #25D89E 8%, #15C5A7 14%, #04B2AF 19%, #04B2AF 72%, #15C5A7 79%, #25D89E 85%, #46FE8D 98%);
+    --gradient-green-turquoise-100: conic-gradient(from 90deg at 50% 100%, #46FE8D 0%, #23C18A 9%, #12A289 14%, #008387 19%, #008387 72%, #12A289 79%, #23C18A 85%, #46FE8D 98%);
+    --gradient-turquoise-teal-50: conic-gradient(from 90deg at 50% 100%, #05F9F9 0%, #06C1D6 8%, #0689B2 19%, #0689B2 72%, #06C1D6 85%, #05F9F9 98%);
+    --gradient-turquoise-turquoise-100: conic-gradient(from 90deg at 50% 100%, #05F9F9 0%, #03BEC0 9%, #008387 19%, #008387 72%, #03BEC0 85%, #05F9F9 98%);
+    --gradient-green-teal-cyan-100: conic-gradient(from 90deg at 50% 50%, #04B2AF 0%, #00CCCB 5%, #00E8E8 12%, #02EDED 19%, #05F9F9 25%, #02EDED 31%, #00E8E8 38%, #04B2AF 47%, #04B2AF 50%, #04B2AF 53%, #00AD3A 60%, #00CC4F 64%, #61FF9B 68%, #2BF076 78%, #00CC4F 88%, #04B2AF 100%);
+
+    /* Text - hierarchy on light surfaces */
+    --text-primary: var(--c-neutral-950);      /* headings */
+    --text-secondary: var(--c-neutral-600);    /* body copy */
+    --text-tertiary: var(--c-neutral-550);     /* captions, eyebrows - AA (4.5:1) on white */
+    --text-negative: var(--c-red-300);         /* form errors */
+    /* Text - accent-coloured copy, primary/secondary hierarchy per accent.
+       On LIGHT surfaces the accent hues must be dark enough to read: primary
+       clears AA for normal text (≥4.5:1 on white), secondary is one step lighter
+       for LARGE/emphasis text only (≥3:1). The bright --accent-* tokens are for
+       fills, glows and text on DARK surfaces - never small text on white. */
+    --text-accent-green-primary: var(--c-green-950);   /* 5.5:1 on white */
+    --text-accent-green-secondary: var(--c-green-900); /* 4.0:1 - large text */
+    --text-accent-cyan-primary: var(--c-cyan-950);     /* 4.6:1 on white */
+    --text-accent-cyan-secondary: var(--c-cyan-900);   /* 3.5:1 - large text */
+    --text-accent-amber: var(--c-mustard-600);         /* 5.3:1 - amber copy on white */
+    /* Gain / loss figures rendered as coloured TEXT on light surfaces. */
+    --text-positive: var(--c-green-950);       /* 5.5:1 - gains */
+    --text-loss: var(--c-red-600);             /* 5.6:1 - losses */
+    /* Text - hierarchy on fixed dark surfaces */
+    --text-on-dark-primary: var(--c-neutral-0);    /* white text/icons/borders */
+    --text-on-dark-secondary: var(--c-neutral-200);
+    --text-on-dark-tertiary: var(--c-neutral-400); /* supporting copy on dark */
+    --text-on-dark-faint: rgba(224, 225, 227, 0.4); /* deliberate overlay - fine print */
+    --text-on-dark-label: rgba(255, 255, 255, 0.45); /* fixed-dark section labels */
+    --text-on-dark-muted: rgba(255, 255, 255, 0.62); /* fixed-dark supporting copy */
+    --text-on-dark-link: rgba(255, 255, 255, 0.78);  /* fixed-dark links and legal copy */
+
+    /* Surface - page + section backgrounds */
+    --surface-canvas: var(--c-neutral-0);       /* primary background */
+    --surface-raised: var(--c-neutral-50);      /* raised cards on canvas */
+    --surface-subtle: var(--c-neutral-100);     /* alternating section background */
+    --surface-dark: var(--c-neutral-950);       /* fixed dark sections (hero, security) */
+    --surface-dark-raised: var(--c-neutral-925);/* cards on dark canvas */
+    --surface-dark-soft: var(--c-neutral-900);  /* lifted dark section - two steps up from dark (compliance) */
+    --surface-dark-soft-raised: var(--c-neutral-800); /* cards on the lifted dark section - one step above it */
+    --surface-tint-green: var(--c-green-25);    /* B2B light canvas */
+    --surface-tint-cyan: var(--c-cyan-25);      /* B2C light canvas */
+    --surface-flow-green: var(--c-green-150);   /* section flow gradient - mid */
+    --surface-flow-cyan: var(--c-cyan-150);     /* section flow gradient - end */
+    --surface-flow-cyan-soft: var(--c-cyan-100); /* section flow gradient - lighter blue peak */
+    --surface-placeholder: var(--c-neutral-300); /* image/logo placeholder backs */
+    --surface-on-dark-soft: rgba(255, 255, 255, 0.08); /* subtle fixed-dark controls */
+    --surface-nav-glass: rgba(255, 255, 255, 0.88); /* fixed light navigation glass */
+    --surface-nav-hover: var(--c-green-200);
+    --surface-device-frame: var(--c-neutral-900);
+    --surface-device-camera: var(--c-neutral-700);
+    --surface-device-screen: var(--c-neutral-0);
+    --surface-device-toolbar: var(--c-neutral-100);
+    --scrollbar-thumb: color-mix(in srgb, var(--c-neutral-500) 55%, transparent);
+    --scrollbar-thumb-hover: color-mix(in srgb, var(--c-neutral-500) 85%, transparent);
+    /* Translucent brand-green fill for chips / icon tiles / highlight rows
+       (e.g. the SEC-outcome row, the security data-fact + tech-block icon
+       tiles, the careers file-picker button). A deliberate 10% overlay so it
+       sits softly on both light and fixed-dark surfaces; mirrors the
+       color-mix pattern already used for the patent "Issued" badge. */
+    --surface-wash-green: color-mix(in srgb, var(--c-green-700) 10%, transparent);
+
+    /* Tint aurora - blob companions per tint family, consumed by
+       assets/js/scroll-tint.js. Over each section's base tint the underlay
+       floats three blobs: a white light-source (glow), a LIGHTER companion
+       and a DEEPER-but-still-very-light companion of the same hue, so the
+       background reads as shifting light, never as a second colour. */
+    --tint-blob-glow: var(--c-neutral-0);
+    --tint-blob-green-light: var(--c-green-100);
+    --tint-blob-green-deep: var(--c-green-200);
+    --tint-blob-cyan-light: var(--c-cyan-100);
+    --tint-blob-cyan-deep: var(--c-cyan-200);
+    --tint-blob-neutral-light: var(--c-neutral-50);
+    --tint-blob-neutral-deep: var(--c-neutral-100);
+
+    /* Construction lines - the fixed page-level blade pattern
+       (assets/js/construction-lines.js). One stroke colour + opacity pair per
+       background family; the module crossfades between them along the same
+       data-tint stop map the scroll-tint underlay uses. */
+    --lines-stroke-on-white: var(--accent-green);   --lines-alpha-on-white: 0.24;
+    --lines-stroke-on-tint: var(--c-neutral-0);     --lines-alpha-on-tint: 0.80;
+    --lines-stroke-on-dark: var(--accent-green);    --lines-alpha-on-dark: 0.04;
+
+    /* Border */
+    --border-default: var(--c-neutral-500);     /* emphasised strokes */
+    --border-subtle: var(--c-neutral-200);      /* hairlines */
+    --border-on-dark: rgba(255, 255, 255, 0.12); /* deliberate overlay - hairlines on fixed dark surfaces */
+    --border-on-dark-strong: rgba(255, 255, 255, 0.25);
+    --border-nav-glass: rgba(17, 17, 18, 0.07);
+    --border-device-camera: var(--c-neutral-800);
+    --border-device-divider: var(--c-neutral-200);
+
+    /* Fixed visual overlays and mask paint. These keep composite visuals tied
+       to semantic palette roles rather than page-local colour literals. */
+    --mask-stencil: var(--c-neutral-1000);
+    --selection-bg: color-mix(in srgb, var(--accent-green) 40%, transparent);
+    --loader-shine-soft: var(--accent-green-soft);
+    --loader-shine-peak: var(--text-on-dark-primary);
+    --loader-shine-gradient: linear-gradient(105deg, transparent 0%, color-mix(in srgb, var(--text-on-dark-primary) 45%, transparent) 50%, transparent 100%);
+    --footer-glow: color-mix(in srgb, var(--accent-cyan-bright) 16%, transparent);
+    --footer-shade-mid: color-mix(in srgb, var(--surface-dark) 50%, transparent);
+    --footer-shade-deep: color-mix(in srgb, var(--surface-dark) 56%, transparent);
+    --team-holo-strong: color-mix(in srgb, var(--brand-primary) 32%, transparent);
+    --team-holo-mid: color-mix(in srgb, var(--brand-primary) 16%, transparent);
+    --team-holo-soft: color-mix(in srgb, var(--brand-primary) 24%, transparent);
+
+    /* Feedback - status + market gain/loss */
+    --feedback-positive: var(--c-green-700);    /* success, gains */
+    --feedback-negative: var(--c-red-300);      /* errors */
+    --feedback-warning: var(--c-mustard-300);
+    --feedback-loss: var(--c-red-450);          /* market losses, destructive actions */
+
+    /* Chart - series palette + named allocation hues */
+    --chart-series-1: var(--c-green-700);
+    --chart-series-2: var(--c-cyan-700);
+    --chart-series-3: var(--c-purple-300);
+    --chart-series-4: var(--c-blue-300);
+    --chart-series-5: var(--c-mustard-300);
+    --chart-series-6: var(--c-magenta-300);
+    --chart-indigo: var(--c-indigo-500);        /* allocation segment 3 */
+    --chart-pink: var(--c-pink-500);            /* allocation segment 5 */
+
+    /* ---- Type families (mirrors assets/typography.css) ---- */
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    /* ---- Layout ---- */
+    --max: 1440px;
+    --max-width: 1140px;
+    --cookie-banner-max: 560px;
+    --pad: clamp(16px, 5vw, 80px);
+    /* Narrowest supported width. The layout is designed down to here; below it
+       the page holds this width and the viewport scrolls horizontally instead of
+       reflowing further. Applied to the page floor (body) and the two
+       viewport-anchored chrome layers that don't inherit it (fixed nav, footer). */
+    --site-min: 280px;
+
+    /* ---- Spacing scale ----
+       Progressive: 2px steps small, widening to 32px at the top. Every fixed
+       gap / padding / margin references one of these (see tools/space-codemod.js). */
+    --space-2: 2px;
+    --space-4: 4px;
+    --space-6: 6px;
+    --space-8: 8px;
+    --space-10: 10px;
+    --space-12: 12px;
+    --space-14: 14px;
+    --space-16: 16px;
+    --space-20: 20px;
+    --space-24: 24px;
+    --space-32: 32px;
+    --space-40: 40px;
+    --space-48: 48px;
+    --space-64: 64px;
+    --space-80: 80px;
+    --space-96: 96px;
+    --space-128: 128px;
+
+    /* ---- Footer chrome rhythm ----
+       Bespoke vertical beats from the homepage footer design that fall between
+       the global spacing steps (30/34/36). Consumed by assets/css/chrome.css;
+       kept exact rather than snapped so the ported footer stays 1:1. */
+    --footer-space: 30px;         /* base beat: bottom pad, contact top, copyright top */
+    --footer-cta-space: 34px;     /* CTA pill offset under the footer headline */
+    --footer-socials-space: 36px; /* socials row offset */
+
+    /* ---- Fluid typography breakpoints ----
+       The viewport widths at which fluid type reaches its MIN and MAX size.
+       The /ds typography editor derives each --ts-*-size clamp() from these. */
+    --bp-min: 390px;
+    --bp-max: 1440px;
+
+    /* ---- Shape ---- */
+    --radius-2xs: 2px;   /* hairline bars (nav burger lines) */
+    --radius-xs: 4px;    /* tiny accents (nav hover underline) */
+    --radius-sm: 12px;   /* list rows, inputs, small tiles */
+    --radius-md: 16px;   /* inner cards (e.g. mega-nav featured panel) */
+    --radius: 20px;
+    --radius-lg: 40px;
+    --radius-pill: 9999px; /* fully-round: nav links, pills, mobile CTAs */
+    --radius-nav: 32px;    /* the nav pill SURFACE. ≥ half the bar height, so the
+                              closed bar clamps to a perfect pill - but numerically
+                              close to --radius-lg, so the radius morph while the
+                              drawer opens interpolates smoothly instead of
+                              plummeting from 9999px in the final frame. */
+    --radius-round: 50%;   /* perfect circle (social icon buttons) */
+    --radius-focus: 6px;   /* focus-visible outline rounding */
+    --radius-footer: clamp(20px, 2.4vw, 30px);
+    --corner-shape: superellipse(1.6);
+
+    /* ---- Elevation (shadows) ---- */
+    --shadow-nav-pill: 0 8px 30px rgba(17, 17, 18, 0.08);    /* docked nav pill */
+    --shadow-mega-bar: 0 40px 70px rgba(17, 17, 18, 0.12);   /* expanded nav-bar panel */
+    --shadow-mega-card: 0 30px 80px rgba(17, 17, 18, 0.16);  /* docked floating mega card */
+    --shadow-device: 0 30px 70px rgba(0, 0, 0, 0.22);
+    --shadow-team-card: 0 10px 28px rgba(0, 0, 0, 0.09);
+    --shadow-team-card-front: 0 20px 50px rgba(0, 0, 0, 0.15);
+    --glow-nav-underline: 0 0 12px 3px rgba(0, 204, 79, 0.4); /* nav link hover underline */
+    --glow-pill-green: 0 6px 20px rgba(0, 204, 79, 0.35);     /* green pill hover lift */
+    --glow-pill-cyan: 0 6px 20px rgba(4, 178, 175, 0.35);     /* cyan pill hover lift (B2C) */
+
+    /* ---- Elevation (z-index) ---- */
+    --z-raised: 1;        /* local stacking: lift content above a sibling backdrop (footer media, heroes) */
+    --z-hero-content: 2;  /* hero typography above local artwork + veil layers */
+    --z-overlay: 30;      /* in-page expanded overlays (patent card hover expansion / tap modal) - below the nav */
+    --z-nav: 100;         /* fixed top nav bar */
+    --z-nav-link: 1;      /* nav link above its sliding hover pill (z 0) */
+    --z-menu: 200;        /* mobile nav menu */
+    --z-scrollbar: 250;   /* overlay scrollbar - above the menu */
+    --z-skip-link: 275;   /* keyboard skip target - above persistent chrome, below boot loader */
+    --z-loader: 300;      /* boot loader overlay - owns first paint, above ALL chrome */
+
+    /* ---- Nav ---- */
+    --nav-pill-max: 1040px; /* width the floating pill shrinks to once scrolled */
+
+    /* ---- Control glyphs ---- */
+    --nav-close-size: 34px; /* mobile-menu close "×" */
+
+    /* ---- Motion ---- */
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --nav-morph-duration: 0.65s;
+    --nav-content-fade-duration: 0.26s;
+    --nav-content-reveal-delay: 0.16s;
+    --hero-logo-build-duration: 5.333s;
+    --hero-logo-build-duration-repeat: 2.4s;
+    --hero-logo-wire-opacity: 0.72;
+    --hero-logo-wire-fade-start: 0.72;
+    --hero-logo-wire-fade-end: 0.88;
+    --hero-logo-monument-scale: 2.35; /* ~2× viewport-height model diameter */
+    --hero-logo-monument-blur: var(--space-32);
+    --hero-logo-monument-opacity: 0.72;
+    --hero-logo-trail-radius: 0.24; /* construction-line radius, fraction of viewport height */
+    --hero-logo-trail-deblur-radius: 0.30;
+    --hero-logo-trail-opacity: 0.96;
+    --hero-logo-trail-duration: 0.9s;
+    --hero-logo-trail-sample-duration: 0.045s;
+    --hero-logo-trail-lag: 3.2;
+    --hero-logo-trail-wire-opacity: 0.64;
+    --hero-logo-drag-sensitivity: 0.0024;
+    --hero-logo-drag-damping: 7;
+    --hero-logo-drag-max-speed: 1;
+    --hero-logo-monument-scroll-speed: 1.65;
+    --logo-cloud-scroll-distance-per-item: 0.22; /* viewport-height fraction allotted to each scrubbed logo */
+
+    /* ---- Page transition (see assets/css/transitions.css) ----
+       The cross-page "card" transition: the old page blurs + settles back
+       (compliance-section vocabulary) while the new page rises over it as a
+       rounded card that grows to full bleed. Consumed by the Astro layout. */
+    --pt-in-duration: 1s;
+    --pt-in-delay: 0.22s;   /* the outgoing page gets its exit beat before the card rises */
+    --pt-out-duration: 1s;
+    --pt-blur: 20px;
+    --pt-out-rise: 18vh;    /* how far the outgoing page travels up */
+    --pt-out-scale: 0.985;  /* how much it settles back (barely - travel does the work) */
+    --pt-card-radius: var(--radius);
+    --pt-card-rise: 100vh;  /* card starts fully below the viewport and slides up into place */
+    --pt-card-scale: 0.92;
+    --pt-card-shadow: 0 -30px 90px rgba(0, 0, 0, 0.45);
+    --pt-backdrop: var(--surface-dark);
+
+    /* ---- Sequential reveal (see assets/js/reveal-on-scroll.js) ---- */
+    --reveal-ease: cubic-bezier(0.33, 1, 0.68, 1);
+    --reveal-duration: 1s;
+    --reveal-delay: 0.12s;
+    --reveal-stagger: 0.1s;
+    --reveal-shift: 16px;
+    --reveal-blur: 8px;
+
+    /* ---- Component tokens ----
+       Per-component variables consumed by assets/css/components.css and
+       surfaced/editable in /ds → Components → Elements. Filled-variant hover /
+       pressed states are derived from the base bg via color-mix (see that file),
+       so only base bg/fg + global mix amounts live here - no state explosion. */
+    /* Global (component-wide) */
+    --btn-radius: 9999px;
+    --btn-state-darken: var(--c-neutral-1000);
+    --btn-gap: var(--space-8);
+    --btn-line: 1;                /* single-line centring, independent of type style */
+    --btn-hover-darken: 8%;
+    --btn-active-darken: 14%;
+    --btn-ghost-hover-fill: 6%;
+    /* Per-size shape */
+    --btn-pad-y-s: var(--space-8);  --btn-pad-x-s: var(--space-16);
+    --btn-pad-y-m: var(--space-10); --btn-pad-x-m: var(--space-20);
+    --btn-pad-y-l: var(--space-16); --btn-pad-x-l: var(--space-32);
+    /* Per-size font - driven by the type-style selector in /ds (one style/size).
+       Defaults: L→Eyebrow/M, M→Eyebrow/S, S→Label/S. */
+    --btn-l-family: var(--ts-eyebrow-m-family); --btn-l-size: var(--ts-eyebrow-m-size); --btn-l-weight: var(--ts-eyebrow-m-weight); --btn-l-spacing: var(--ts-eyebrow-m-spacing);
+    --btn-m-family: var(--ts-eyebrow-s-family); --btn-m-size: var(--ts-eyebrow-s-size); --btn-m-weight: var(--ts-eyebrow-s-weight); --btn-m-spacing: var(--ts-eyebrow-s-spacing);
+    --btn-s-family: var(--ts-label-s-family);   --btn-s-size: var(--ts-label-s-size);   --btn-s-weight: var(--ts-label-s-weight);   --btn-s-spacing: var(--ts-label-s-spacing);
+    /* Per-variant colour (token pickers in /ds) */
+    --btn-primary-bg: var(--accent-green);        --btn-primary-fg: var(--text-primary);
+    --btn-secondary-bg: var(--accent-cyan-bright);       --btn-secondary-fg: var(--text-primary);   /* B2C cyan - the app's "Use Web Version" / "Try Warren" hue */
+    --btn-default-bg: var(--c-neutral-100);      --btn-default-fg: var(--text-primary);
+    --btn-ghost-fg: var(--text-primary);      --btn-ghost-border: var(--border-subtle);
+    --btn-destructive-bg: var(--feedback-loss); --btn-destructive-fg: var(--surface-canvas);
+
+    /* Special button - single variant. Colours mirror the homepage team card's
+       LinkedIn pill (.contact--li): very light green at rest, darker mint on
+       hover, dark text, no glow. Consumed by .sb-btn--special; editable in
+       /ds → Components → Elements. */
+    --btn-special-bg: var(--accent-green-soft);
+    --btn-special-fg: var(--text-primary);
+    --btn-special-bg-hover: var(--c-green-200);   /* #ADFFC9 */
+    --btn-special-pad-y: var(--space-16);
+    --btn-special-pad-x: var(--space-32);
+    --btn-special-family: var(--ts-eyebrow-s-family); --btn-special-size: var(--ts-eyebrow-s-size); --btn-special-weight: var(--ts-eyebrow-s-weight); --btn-special-spacing: var(--ts-eyebrow-s-spacing);
+    /* Special · frosted variant - mirrors the team card's email/phone pill
+       (.contact): a dark translucent surface over the portrait, hairline border
+       and backdrop blur, white text. Layout/type inherit the special base; only
+       the colour + glass treatment change. Consumed by .sb-btn--special.sb-btn--frosted. */
+    --btn-special-frosted-bg: rgba(16, 17, 20, 0.55);
+    --btn-special-frosted-bg-hover: rgba(16, 17, 20, 0.72);
+    --btn-special-frosted-fg: var(--c-neutral-0);
+    --btn-special-frosted-border: rgba(255, 255, 255, 0.16);
+    --btn-special-frosted-border-hover: rgba(255, 255, 255, 0.3);
+    --btn-special-frosted-blur: 8px;
+
+    /* Input - one control class for input / select / textarea. Consumed by
+       .sb-input; editable in /ds → Components → Elements. Defaults mirror the
+       original careers "Join the team" fields: fixed 52px height, horizontal
+       padding only, and a clean border-only focus (no glow). */
+    --input-bg: var(--surface-canvas);
+    --input-fg: var(--text-primary);
+    --input-placeholder: var(--text-tertiary);
+    --input-border: var(--border-subtle);
+    --input-border-focus: var(--accent-green);
+    --input-radius: 12px;
+    --input-height: 52px;                 /* single-line input/select */
+    --input-pad-x: var(--space-16);
+    --input-pad-y: var(--space-12);       /* textarea only (multi-line) */
+    --input-textarea-min-h: 120px;
+    /* Body/Base (fixed 16px). Deliberately NOT the fluid Body/M - a fixed-height
+       control needs a stable type size, not one that grows to 20px on wide views. */
+    --input-font-family: var(--ts-body-base-family); --input-font-size: var(--ts-body-base-size); --input-font-weight: var(--ts-body-base-weight); --input-font-spacing: var(--ts-body-base-spacing);
+}
+
+/* ============================================================================
+   TIER 2 (Dark) - every semantic alias has a dark counterpart under
+   .theme-dark. Toggled by the /ds mode switch (and, in Phase 2, by the
+   product). Light values stay in :root above. The on-dark text group mirrors
+   its light values on purpose: those surfaces are fixed-dark in both themes.
+   ============================================================================ */
+.theme-dark {
+    /* Brand */
+    --brand-primary: var(--c-green-500);
+    --brand-secondary: var(--c-cyan-400);
+    /* Accent */
+    --accent-green: var(--c-green-500);
+    --accent-green-bright: var(--c-green-400);
+    --accent-green-soft: var(--c-green-950);
+    --accent-cyan: var(--c-cyan-400);
+    --accent-cyan-bright: var(--c-cyan-300);
+    --accent-cyan-soft: var(--c-cyan-950);
+    --accent-amber: var(--c-amber-500);
+    /* Text */
+    --text-primary: var(--c-neutral-0);
+    --text-secondary: var(--c-neutral-400);
+    --text-tertiary: var(--c-neutral-500);
+    --text-negative: var(--c-red-300);
+    --text-accent-green-primary: var(--c-green-500);
+    --text-accent-green-secondary: var(--c-green-600);
+    --text-accent-cyan-primary: var(--c-cyan-400);
+    --text-accent-cyan-secondary: var(--c-cyan-600);
+    --text-accent-amber: var(--c-amber-500);
+    --text-positive: var(--c-green-500);
+    --text-loss: var(--c-red-300);
+    --text-on-dark-primary: var(--c-neutral-0);
+    --text-on-dark-secondary: var(--c-neutral-200);
+    --text-on-dark-tertiary: var(--c-neutral-400);
+    --text-on-dark-faint: rgba(224, 225, 227, 0.4);
+    /* Surface */
+    --surface-canvas: var(--c-neutral-950);
+    --surface-raised: var(--c-neutral-900);
+    --surface-subtle: var(--c-neutral-925);
+    --surface-dark: var(--c-neutral-950);
+    --surface-dark-raised: var(--c-neutral-925);
+    --surface-dark-soft: var(--c-neutral-900);
+    --surface-dark-soft-raised: var(--c-neutral-800);
+    --surface-tint-green: var(--c-green-950);
+    --surface-tint-cyan: var(--c-cyan-950);
+    --surface-flow-green: var(--c-green-900);
+    --surface-flow-cyan: var(--c-cyan-900);
+    --surface-flow-cyan-soft: var(--c-cyan-800);
+    /* Border */
+    --border-default: var(--c-neutral-600);
+    --border-subtle: var(--c-neutral-800);
+    --border-on-dark: rgba(255, 255, 255, 0.12);
+    /* Feedback */
+    --feedback-positive: var(--c-green-500);
+    --feedback-negative: var(--c-red-300);
+    --feedback-warning: var(--c-mustard-300);
+    --feedback-loss: var(--c-red-450);
+    /* Chart */
+    --chart-series-1: var(--c-green-500);
+    --chart-series-2: var(--c-cyan-400);
+    --chart-series-3: var(--c-purple-300);
+    --chart-series-4: var(--c-blue-300);
+    --chart-series-5: var(--c-yellow-300);
+    --chart-series-6: var(--c-magenta-300);
+    --chart-indigo: var(--c-indigo-500);
+    --chart-pink: var(--c-pink-500);
+}
+
+/* ============================================================================
+   Continuous corners - site-wide squircle
+   Every rounded corner on the site uses the continuous superellipse curve
+   (--corner-shape) instead of a plain circular arc. This is a progressive
+   enhancement: `corner-shape` is a newer property (Chrome 139+); browsers that
+   don't understand it simply drop this declaration and fall back to the plain
+   circular `border-radius` each element already sets. Tune the curve in one
+   place via --corner-shape above; never hand-write `corner-shape` per element.
+   ============================================================================ */
+*,
+*::before,
+*::after {
+    corner-shape: var(--corner-shape);
+}

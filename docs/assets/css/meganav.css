@@ -1,0 +1,177 @@
+/* ============================================================================
+   Streetbeat - Mega navigation panels
+   Three hover menus (Solutions / Security / Company) shared by every page.
+   Markup contract (per page, inside <nav id="nav">):
+
+     <li class="has-mega" data-mega="mega-solutions">
+         <a class="mega-trigger" aria-haspopup="true" aria-expanded="false"
+            aria-controls="mega-solutions">Solutions<span class="nav-caret"></span></a>
+     </li>
+     ...
+     <div class="mega mega--solutions" id="mega-solutions">…</div>
+
+   ONE presentation mode, identical in both nav states: the panels live
+   INSIDE the pill (.nav-drawer, a row of the .nav-inner column flexbox).
+   On hover meganav.js animates the drawer's height, so the pill surface
+   itself morphs downwards to make room for the content - no separate
+   floating card, no full-width bar.
+
+   Behaviour lives in assets/js/meganav.js. Depends on tokens.css +
+   typography.css. Hidden entirely below the burger breakpoint (1080px).
+   ============================================================================ */
+
+.has-mega > .mega-trigger { display: inline-flex; align-items: center; gap: var(--space-6); cursor: pointer; }
+/* Direction chevron: points right at rest, rotates to point down while the
+   trigger is hovered or its panel is open. It's a transform-only rotation, so
+   the label never shifts. Stays down while the panel is open, matching the
+   sticky hover pill. */
+.nav-caret {
+    width: 6px; height: 6px;
+    border-right: 1.6px solid currentColor; border-bottom: 1.6px solid currentColor;
+    transform: rotate(-45deg);   /* points right */
+    transition: transform 0.3s var(--ease);
+    opacity: 0.65;
+}
+.mega-trigger:hover .nav-caret,
+.has-mega.is-open .nav-caret { transform: rotate(45deg); }   /* points down */
+
+/* ---- Drawer: the pill's expanding row ------------------------------------- */
+/* Closed at height 0; meganav.js sets an explicit pixel height (the active
+   panel's height) so open, close AND panel-to-panel switches all morph. */
+.nav-drawer {
+    height: 0;
+    overflow: hidden;
+    /* Rounds the open card's bottom corners itself - .nav-inner must NOT clip
+       (overflow:hidden there would kill its backdrop-filter). Matches the
+       nav.mega-open .nav-inner radius. */
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    transition: height 0.55s var(--ease);
+}
+/* Only the active panel participates in layout, so the drawer's measured
+   height is always the height of what's actually shown. */
+.mega { display: none; padding: clamp(20px, 2.4vw, 32px) var(--space-24) clamp(24px, 2.6vw, 36px); }
+.mega.is-open { display: block; animation: mega-in 0.45s var(--ease) 0.08s both; }
+/* Content settles into the growing surface: fade + rise + de-blur (an
+   animation, not a transition, so it plays across the display flip). */
+@keyframes mega-in {
+    from { opacity: 0; transform: translateY(-8px); filter: blur(6px); }
+    to   { opacity: 1; transform: none; filter: none; }
+}
+
+.mega-inner {
+    display: grid;
+    gap: clamp(32px, 3.6vw, 72px);
+}
+
+/* Per-panel column layouts (the drawer spans the full pill width). */
+.mega--solutions .mega-inner {
+    grid-template-columns: minmax(250px, 0.92fr) minmax(0, 2fr);
+    align-items: stretch;
+    column-gap: clamp(32px, 3.6vw, 72px);
+    row-gap: clamp(16px, 1.8vw, 26px);
+}
+.mega--security  .mega-inner { grid-template-columns: repeat(2, minmax(0, 460px)); }
+.mega--company   .mega-inner { grid-template-columns: 1fr; }
+.mega--company   .mega-col   { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 clamp(16px, 2vw, 36px); }
+.mega--company   .mega-col > .mega-eyebrow { grid-column: 1 / -1; }
+
+/* ---- Columns & items ------------------------------------------------------ */
+.mega-solutions-title {
+    grid-column: 1 / -1;
+    font-family: var(--ts-label-s-family); font-size: var(--ts-label-s-size);
+    font-weight: var(--ts-label-s-weight); line-height: var(--ts-label-s-line);
+    letter-spacing: var(--ts-label-s-spacing); text-transform: var(--ts-label-s-case);
+    color: var(--text-tertiary);
+}
+/* Text style: Label/S */
+.mega-eyebrow {
+    font-family: var(--ts-label-s-family); font-size: var(--ts-label-s-size);
+    font-weight: var(--ts-label-s-weight); line-height: var(--ts-label-s-line);
+    letter-spacing: var(--ts-label-s-spacing); text-transform: var(--ts-label-s-case);
+    color: var(--text-tertiary); padding: 0 var(--space-12); margin-bottom: var(--space-12);
+}
+.mega-col--bank-sections { display: flex; align-items: center; }
+.mega-section-grid {
+    display: grid; width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(28px, 4vw, 72px);
+    row-gap: clamp(28px, 3.6vw, 56px);
+    align-content: center;
+}
+.mega-item { display: block; padding: var(--space-14) var(--space-12); border-radius: var(--radius-sm); }
+/* Hover: no card fill - the text simply darkens and an arrow slides in. */
+/* Text style: Eyebrow/S */
+.mega-item-title {
+    display: block;
+    font-family: var(--ts-eyebrow-s-family); font-size: var(--ts-eyebrow-s-size);
+    font-weight: var(--ts-eyebrow-s-weight); line-height: var(--ts-eyebrow-s-line);
+    letter-spacing: var(--ts-eyebrow-s-spacing); color: var(--text-secondary);
+    transition: color 0.2s var(--ease);
+}
+/* Text style: Body/Base */
+.mega-item-desc {
+    display: block; margin-top: var(--space-4);
+    font-family: var(--ts-body-base-family); font-size: var(--ts-body-base-size);
+    font-weight: var(--ts-body-base-weight); line-height: var(--ts-body-base-line);
+    letter-spacing: var(--ts-body-base-spacing); color: var(--text-tertiary);
+    transition: color 0.2s var(--ease);
+}
+.mega-arrow {
+    display: inline-block; margin-left: var(--space-6);
+    opacity: 0; transform: translateX(-6px);
+    transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.mega-item:hover .mega-item-title, .mega-item:focus-visible .mega-item-title { color: var(--text-primary); }
+.mega-item:hover .mega-item-desc,   .mega-item:focus-visible .mega-item-desc  { color: var(--text-secondary); }
+.mega-item:hover .mega-arrow,       .mega-item:focus-visible .mega-arrow      { opacity: 1; transform: none; }
+
+/* ---- Featured card (Solutions panel) -------------------------------------- */
+.mega-feature {
+    background: var(--surface-subtle); border-radius: var(--radius-md); padding: clamp(18px, 1.6vw, 24px);
+    display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-20);
+}
+.mega-feature--banks { min-height: clamp(280px, 29vw, 350px); }
+/* Text style: Label/S */
+.mega-feature-eyebrow {
+    font-family: var(--ts-label-s-family); font-size: var(--ts-label-s-size);
+    font-weight: var(--ts-label-s-weight); letter-spacing: var(--ts-label-s-spacing);
+    text-transform: var(--ts-label-s-case); color: var(--text-accent-green-primary);
+}
+/* Text style: Eyebrow/L */
+.mega-feature-title {
+    font-family: var(--ts-eyebrow-l-family); font-size: var(--ts-eyebrow-l-size);
+    font-weight: var(--ts-eyebrow-l-weight); line-height: var(--ts-eyebrow-l-line);
+    letter-spacing: var(--ts-eyebrow-l-spacing); color: var(--text-primary); margin-top: var(--space-2);
+}
+/* Text style: Body/Base */
+.mega-feature-sub {
+    font-family: var(--ts-body-base-family); font-size: var(--ts-body-base-size);
+    font-weight: var(--ts-body-base-weight); line-height: var(--ts-body-base-line);
+    letter-spacing: var(--ts-body-base-spacing); color: var(--text-secondary); margin-top: var(--space-10);
+}
+.mega-feature-foot { display: flex; flex-direction: column; gap: var(--space-16); }
+.mega-press { display: flex; align-items: center; gap: var(--space-20); }
+/* Each logo grows to fill an equal share of the row; width drives the size and
+   height:auto keeps every mark's native aspect ratio (no squish). */
+.mega-press img { flex: 1 1 0; min-width: 0; width: 100%; height: auto; opacity: 0.4; filter: grayscale(1); }
+/* Text style: Eyebrow/S */
+.mega-feature-cta {
+    font-family: var(--ts-eyebrow-s-family); font-size: var(--ts-eyebrow-s-size);
+    font-weight: var(--ts-eyebrow-s-weight); letter-spacing: var(--ts-eyebrow-s-spacing);
+    color: var(--text-primary); display: inline-flex; align-items: center; gap: var(--space-8);
+}
+.mega-feature-cta span { transition: transform 0.25s var(--ease); }
+.mega-feature-cta:hover span { transform: translateX(4px); }
+
+/* Below the burger breakpoint the mega menus don't exist; the burger's
+   #navMobile panel (also inside .nav-drawer) owns navigation there. Keep in
+   sync with navbar.css's collapse breakpoint. */
+@media (max-width: 1080px) {
+    .mega { display: none !important; }
+}
+
+/* Reduced motion: the drawer snaps open/shut, content appears in place. */
+@media (prefers-reduced-motion: reduce) {
+    .nav-drawer { transition: none; }
+    .mega.is-open { animation: none; }
+}

@@ -1,0 +1,114 @@
+/* ============================================================================
+   White-label scrollbar - global native suppression + handle-only overlay thumb
+   ----------------------------------------------------------------------------
+   Authored from the "Scrollbar (ScrollArea)" spec. The spec targets a React/
+   Radix SPA whose inner root is the only scroller (`html { overflow: hidden }`).
+   This site is a static, multi-page surface that scrolls the *window* (Lenis
+   smooth-scroll), so we keep window scrolling enabled and only suppress the
+   native chrome - the visible handle is painted by assets/js/scrollbar.js.
+
+   Mechanism (from the spec): native bar/track/gutter killed once, globally; the
+   only visible bar is the overlay thumb. Every magic number is a token, the
+   thumb colour is a neutral overlay (not a literal, not brand), and reveal/fade
+   timing binds to a motion token so it re-tunes per pack.
+   ========================================================================== */
+
+:root {
+    /* Component geometry and motion. Colour aliases live in tokens.css so
+       every production colour remains part of the shared semantic layer. */
+    --scrollbar-size:        0.5rem;                    /* resting visible thumb w/h */
+    --scrollbar-expand:      1.5;                        /* hover/grab multiplier */
+    --scrollbar-gap:         var(--space-4);                       /* space from the edge */
+    --scrollbar-radius:      var(--radius-pill);        /* pill thumb */
+    /* bank-* motion token: reveal/fade duration (mirrors scrollHideDelay). */
+    --bank-scrollbar-fade:   500ms;
+}
+
+/* --- Global suppression (scaffold, once) ----------------------------------
+   No native bar, track, or reserved gutter ever appears, on any element, any
+   OS/browser. Scrolling itself stays enabled (unlike the spec's SPA root which
+   sets `html { overflow: hidden }` - here the window must keep scrolling). */
+* { scrollbar-width: none; }                    /* Firefox: no native bar */
+*::-webkit-scrollbar { width: 0; height: 0; }   /* WebKit: no bar, no track, no reserved space */
+
+/* --- Overlay scrollbar (painted by assets/js/scrollbar.js) ----------------
+   The track is invisible and only the thumb paints - never add a track fill,
+   that re-introduces the container the bar is meant to avoid. Tracks are
+   position:fixed and placed over the scroller's edge by JS (works for the
+   window and for inner containers without wrapping their DOM). */
+.sb-track {
+    position: fixed;
+    z-index: var(--z-scrollbar);   /* above the mobile menu (var(--z-menu)) */
+    pointer-events: none;    /* track never blocks; only the thumb reacts */
+    opacity: 0;
+    transition: opacity var(--bank-scrollbar-fade) var(--ease);
+}
+/* Track width holds the full (doubled) grab area + the edge gap. */
+.sb-track[data-orientation='vertical']   { width:  calc(var(--scrollbar-size) * var(--scrollbar-expand) + var(--scrollbar-gap)); }
+.sb-track[data-orientation='horizontal'] { height: calc(var(--scrollbar-size) * var(--scrollbar-expand) + var(--scrollbar-gap)); }
+
+/* Reveal-on-scroll-then-fade: JS toggles .is-visible while scrolling/dragging. */
+.sb-track.is-visible { opacity: 1; }
+
+/* The thumb element is the *interaction area* - always the doubled width, with
+   the edge gap on the inner side; it carries no paint. Pointer events are only
+   live while the bar is shown, so the wide hit-zone never eats clicks on the
+   content beneath a faded-out bar. */
+.sb-thumb {
+    position: absolute;
+    background: transparent;
+    touch-action: none;
+    pointer-events: none;
+}
+.sb-track.is-visible .sb-thumb { pointer-events: auto; }
+.sb-track[data-orientation='vertical']   .sb-thumb { right:  var(--scrollbar-gap); width:  calc(var(--scrollbar-size) * var(--scrollbar-expand)); }
+.sb-track[data-orientation='horizontal'] .sb-thumb { bottom: var(--scrollbar-gap); height: calc(var(--scrollbar-size) * var(--scrollbar-expand)); }
+
+/* The visible pill - anchored to the inner edge of the hit-zone so it grows
+   *inward* (away from the screen edge) on hover. Resting width is the token;
+   hover/drag expands it to fill the doubled grab area. */
+.sb-thumb::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 0 auto;                 /* top/right/bottom pinned, left auto → grows left */
+    width: var(--scrollbar-size);
+    border-radius: var(--scrollbar-radius);
+    background: var(--scrollbar-thumb);
+    transition: width 140ms var(--ease), background 150ms var(--ease);
+}
+.sb-track[data-orientation='horizontal'] .sb-thumb::before {
+    inset: auto 0 0 0;                 /* pin to inner (bottom) edge for horizontal */
+    width: auto;
+    height: var(--scrollbar-size);
+    transition: height 140ms var(--ease), background 150ms var(--ease);
+}
+.sb-thumb:hover::before,
+.sb-track.is-dragging .sb-thumb::before {
+    width: 100%;
+    background: var(--scrollbar-thumb-hover);
+}
+.sb-track[data-orientation='horizontal'] .sb-thumb:hover::before,
+.sb-track[data-orientation='horizontal'].is-dragging .sb-thumb::before {
+    width: auto;
+    height: 100%;
+}
+
+/* prefers-reduced-motion: the reveal/fade and the hover grow drop to instant;
+   the thumb itself stays (it is state, not motion). */
+@media (prefers-reduced-motion: reduce) {
+    .sb-track        { transition: none; }
+    .sb-thumb::before { transition: background 150ms var(--ease); }
+}
+
+/* --- Edge fades (no-thumb regions) ----------------------------------------
+   Background-agnostic mask fades for "there is more in this direction" cues
+   without a visible bar. pointer-events implicitly preserved (mask only). Tune
+   the fade length per element via --sb-fade. */
+.sb-fade-y {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, var(--mask-stencil) var(--sb-fade, 24px), var(--mask-stencil) calc(100% - var(--sb-fade, 24px)), transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0, var(--mask-stencil) var(--sb-fade, 24px), var(--mask-stencil) calc(100% - var(--sb-fade, 24px)), transparent 100%);
+}
+.sb-fade-x {
+    -webkit-mask-image: linear-gradient(to right, transparent 0, var(--mask-stencil) var(--sb-fade, 24px), var(--mask-stencil) calc(100% - var(--sb-fade, 24px)), transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0, var(--mask-stencil) var(--sb-fade, 24px), var(--mask-stencil) calc(100% - var(--sb-fade, 24px)), transparent 100%);
+}
