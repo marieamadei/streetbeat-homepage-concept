@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 const method = [
-  ["01", "Define the outcome", "Begin with a decision, workflow or result that matters—not with a model."],
+  ["01", "Define the outcome", "Begin with a decision, workflow or result that needs to improve."],
   ["02", "Connect the right data", "Bring together the information, systems and context the work actually depends on."],
   ["03", "Work with domain experts", "Build with the people who understand the constraints, exceptions and consequences."],
   ["04", "Keep humans in control", "Design review, governance and accountability into the system from the start."],
@@ -153,12 +153,15 @@ export default function Home() {
           <div className="section-heading">
             <div>
               <div className="section-kicker">How we work</div>
-              <h2>A model is only<br />the beginning.</h2>
+              <h2>
+                We start with the outcome.<br />
+                Then we integrate AI into the workflows that drive it.
+              </h2>
             </div>
             <p>
-              Useful AI begins with the work itself. We combine technology,
-              organizational context and human accountability to build systems
-              that can be trusted in practice.
+              We identify the decisions, tasks and information flows behind the
+              result you want to improve. Then we connect AI to your data and
+              systems, working with domain experts and keeping people in control.
             </p>
           </div>
           <div className="method-grid">
