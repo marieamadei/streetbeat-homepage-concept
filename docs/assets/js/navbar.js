@@ -121,8 +121,8 @@
        setting an explicit pixel height on the drawer (its content = #navMobile),
        so the pill morphs downwards, transitioned in meganav.css. Capped to the
        viewport so a short (landscape) screen scrolls the panel instead of
-       overflowing. Must stay in sync with the CSS breakpoint (1080px). */
-    var BURGER_BP = 1080;
+       overflowing. Must stay in sync with the CSS breakpoint (960px). */
+    var BURGER_BP = 960;
     var burger = document.getElementById('burger');
     var drawer = nav && nav.querySelector('.nav-drawer');
     var mobilePanel = document.getElementById('navMobile');

@@ -214,6 +214,7 @@ html.lines-on .footer { background: transparent; }
 .footer-col a, .footer-col p, .footer-cookie-settings { font-family: var(--ts-body-base-family); font-size: var(--ts-body-base-size); font-weight: var(--ts-body-base-weight); line-height: var(--ts-body-base-line); letter-spacing: var(--ts-body-base-spacing); color: var(--text-on-dark-link); transition: color 0.2s; }
 .footer-col a:hover, .footer-cookie-settings:hover { color: var(--text-on-dark-primary); }
 .footer-cookie-settings { width: fit-content; margin: 0; padding: 0; border: 0; background: none; text-align: left; cursor: pointer; }
+.footer-cookie-links { display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-12); }
 .footer-contact { margin-left: auto; text-align: right; padding-top: var(--footer-space); }
 .footer-contact .socials { justify-content: flex-end; margin-top: var(--space-20); margin-bottom: 0; }
 .footer-contact a { color: var(--accent-green-bright); }
@@ -227,6 +228,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 /* ============ RESPONSIVE (shared) ============ */
 @media (max-width: 900px) {
     .footer-contact { margin-left: 0; text-align: left; flex-basis: 100%; }
+    .footer-cookie-links { align-items: flex-start; }
 }
 @media (max-width: 600px) {
     .section { padding-top: clamp(72px, 15vw, 100px); padding-bottom: clamp(72px, 15vw, 100px); }

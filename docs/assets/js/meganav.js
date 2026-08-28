@@ -11,8 +11,8 @@
      the pointer's travel between trigger and panel so nothing flickers.
    · Hovering a different trigger switches panels immediately.
    · Triggers are menu buttons, not links: click just opens/toggles.
-   · Keyboard: focusing a trigger opens its panel; focus leaving trigger+panel
-     closes; Escape closes and returns focus to the trigger.
+   · Keyboard: Enter/Space toggles a focused trigger; focus leaving
+     trigger+panel closes; Escape closes and returns focus to the trigger.
    · Scrolling, or clicking/tapping outside, closes.
 
    Dependency-free; self-initializing.
@@ -90,9 +90,10 @@
 
         link.addEventListener('click', function (e) {
             e.preventDefault();
-            if (current === li) closeAll(); else open(li);
+            // Mouse hover opens before click. Keep that click open instead of
+            // immediately toggling it shut; keyboard and touch still toggle.
+            if (current === li && !li.matches(':hover')) closeAll(); else open(li);
         });
-        link.addEventListener('focus', function () { open(li); });
 
         panel.querySelectorAll('a').forEach(function (a) {
             a.addEventListener('click', closeAll);

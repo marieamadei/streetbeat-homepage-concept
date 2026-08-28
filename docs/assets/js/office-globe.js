@@ -65,8 +65,7 @@
     { name: 'Madrid',         lng: -3.70,   lat: 40.42,  type: 'people' }, // 5
     { name: 'Lucca',          lng: 10.50,   lat: 43.84,  type: 'people' }, // 6
     { name: 'Florence',       lng: 11.26,   lat: 43.77,  type: 'people' }, // 7
-    { name: 'Zagreb',         lng: 15.98,   lat: 45.81,  type: 'people' }, // 8
-    { name: 'Sarajevo',       lng: 18.36,   lat: 43.85,  type: 'people' }, // 9
+    { name: 'Sarajevo',       lng: 18.36,   lat: 43.85,  type: 'people' }, // 8
   ];
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

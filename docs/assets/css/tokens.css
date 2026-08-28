@@ -523,6 +523,18 @@
     --chart-pink: var(--c-pink-500);
 }
 
+/* Keep the editorial reveal on small screens, but settle it quickly enough
+   that calls to action are readable as soon as they enter the viewport. */
+@media (max-width: 600px) {
+    :root {
+        --reveal-duration: 0.58s;
+        --reveal-delay: 0.04s;
+        --reveal-stagger: 0.06s;
+        --reveal-shift: 10px;
+        --reveal-blur: 4px;
+    }
+}
+
 /* ============================================================================
    Continuous corners - site-wide squircle
    Every rounded corner on the site uses the continuous superellipse curve

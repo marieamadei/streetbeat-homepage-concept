@@ -261,10 +261,9 @@ nav.menu-open .nm-actions > * {
 }
 
 /* Below this width the desktop bar collapses to the burger + drawer menu.
-   The longer Financial Institutions CTA needs this extra room; the mega
-   panels hide at the same breakpoint in meganav.css.
+   The mega panels hide at the same breakpoint in meganav.css.
    Keep this value in sync with the matching breakpoint in meganav.css. */
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
     .nav-links, .nav-actions { display: none; }
     .nav-burger {
         display: flex;
@@ -300,6 +299,14 @@ nav.menu-open .nm-actions > * {
        finishes first and never overlaps the costly morph. (On close the delay
        drops, so the drawer collapses immediately as the blur returns.) */
     nav.menu-open .nav-drawer { transition-delay: 0.16s; }
+}
+
+/* Let compact laptops use the full information architecture without crowding
+   the floating pill. Touch-first tablet widths continue to use the drawer. */
+@media (min-width: 961px) and (max-width: 1120px) {
+    .nav-bar { gap: var(--space-8); padding-left: var(--space-16); }
+    .nav-links a,
+    .nav-links button.mega-trigger { padding-inline: var(--space-10); }
 }
 
 /* Reduced motion: rows appear in place, no cascade (the drawer's own height

@@ -1,6 +1,6 @@
 /* ============================================================================
    Streetbeat - Mega navigation panels
-   Three hover menus (Solutions / Security / Company) shared by every page.
+   Four hover menus (Solutions / Applications / Security / Company) shared by every page.
    Markup contract (per page, inside <nav id="nav">):
 
      <li class="has-mega" data-mega="mega-solutions">
@@ -17,7 +17,7 @@
    floating card, no full-width bar.
 
    Behaviour lives in assets/js/meganav.js. Depends on tokens.css +
-   typography.css. Hidden entirely below the burger breakpoint (1080px).
+   typography.css. Hidden entirely below the burger breakpoint (960px).
    ============================================================================ */
 
 .has-mega > .mega-trigger { display: inline-flex; align-items: center; gap: var(--space-6); cursor: pointer; }
@@ -71,6 +71,8 @@
     row-gap: clamp(16px, 1.8vw, 26px);
 }
 .mega--security  .mega-inner { grid-template-columns: repeat(2, minmax(0, 460px)); }
+.mega--applications .mega-inner { grid-template-columns: 1fr; }
+.mega--applications .mega-col { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 clamp(16px, 2vw, 36px); }
 .mega--company   .mega-inner { grid-template-columns: 1fr; }
 .mega--company   .mega-col   { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 clamp(16px, 2vw, 36px); }
 .mega--company   .mega-col > .mega-eyebrow { grid-column: 1 / -1; }
@@ -166,7 +168,7 @@
 /* Below the burger breakpoint the mega menus don't exist; the burger's
    #navMobile panel (also inside .nav-drawer) owns navigation there. Keep in
    sync with navbar.css's collapse breakpoint. */
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
     .mega { display: none !important; }
 }
 

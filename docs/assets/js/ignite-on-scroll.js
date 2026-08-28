@@ -78,8 +78,19 @@
         })(heading);
         if (!chars.length) return;
 
+        /* A highlighted phrase may keep its own authored destination colour
+           while participating in the same letter-by-letter ignition. Add
+           data-ignite-end="--token" to an inline wrapper to opt in. */
+        var charEnds = chars.map(function (c) {
+            var owner = c.closest && c.closest('[data-ignite-end]');
+            var token = owner && owner.getAttribute('data-ignite-end');
+            return token ? (cs.getPropertyValue(token).trim() || END) : END;
+        });
+
         /* Rest pose set before this off-screen region ever paints. */
-        gsap.set(chars, { color: END, opacity: REST, willChange: 'opacity, color' });
+        chars.forEach(function (c, i) {
+            gsap.set(c, { color: charEnds[i], opacity: REST, willChange: 'opacity, color' });
+        });
 
         var DUR  = 0.1;
         var step = chars.length > 1 ? (1 - DUR) / (chars.length - 1) : 0;
@@ -91,7 +102,7 @@
                 onStart: function () {
                     gsap.killTweensOf(c, 'color');
                     gsap.set(c, { color: POP });                             /* ignite green */
-                    gsap.to(c, { color: END, duration: 1, delay: 0.08 });    /* settle to base colour, real time */
+                    gsap.to(c, { color: charEnds[i], duration: 1, delay: 0.08 }); /* settle to authored colour, real time */
                 }
             }, i * step);
         });
